@@ -153,7 +153,7 @@
 ---
 
 ### Tarefa 13 — Cliente MCP e integrações gerenciadas
-**Status:** pending
+**Status:** in_progress
 **Lê:** `_reversa_sdd/sdd/mcp-cliente-gerenciado.md`
 **Constrói:** `crates/harness-mcp` (rmcp stdio/http, reconexão, progresso, cancelamento, anotações, `${secret:}`), `crates/harness-integrations` (detecção de runtimes, install/update/doctor de REA, GBrain, Playwright, Chrome DevTools, cua-driver, csharp-ls, Gemini CLI; `NODE_OPTIONS=--use-system-ca`)
 **Pronto quando:** os 6 cenários de aceitação da spec passam
