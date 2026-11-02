@@ -3,7 +3,7 @@
 **Stack:** Rust (edition 2021, resolver 3), Cargo workspace com crates `harness-*` e binário `dsh`; tokio, reqwest (rustls + certificados do SO), serde, rusqlite (FTS5), zstd, rmcp, agent-client-protocol, ratatui, portable-pty, windows-rs, keyring, rquickjs, tree-sitter. Alvo principal: `x86_64-pc-windows-msvc`.
 **Diretório do código:** `D:\dsh\dsh-rs` (repositório novo; o `deepseek-harness` não é alterado).
 **Gerado em:** 2026-11-01
-**Status:** 25 tarefas | 12 concluídas | 13 pendentes
+**Status:** 25 tarefas | 13 concluídas | 12 pendentes
 
 ---
 
@@ -142,10 +142,13 @@
 ---
 
 ### Tarefa 12 — Jobs, agenda e terminais
-**Status:** in_progress
+**Status:** done
 **Lê:** `_reversa_sdd/sdd/jobs-schedule-terminal.md`
 **Constrói:** registro de jobs (ring de saída, dois cursores, `job/registered`/`settled`), wakeup limitado, agenda em domínio próprio (`after`/`at`/`every`/`cron`, `schedule_update`, framing U5), terminais ConPTY
 **Pronto quando:** os 6 cenários de aceitação da spec passam
+**Resultado (2026-11-02):** `harness-tools::jobs` (`JobRegistry` no `ToolEnv`, dono = sessão, até 10 ativos, ids `bash-N`/`pwsh-N`/`agent-N`/`terminal-N`, `BashOutput` com aliases `job_output`/`TaskOutput` devolvendo só a saída nova e `[status: …]`, `job_list`, `KillShell`/`job_kill`/`TaskStop` que espera o fim) com `Bash`/`PowerShell` e `Task` em `run_in_background` e `job/registered`; no loop, `job/settled` e aviso `<task-notification>` que abre turno com o agente ocioso até 3 seguidos (zerado por mensagem do usuário) ou entra no próximo passo (R4); no resume, jobs sem `job/settled` fecham como `failed` interrompido (R5/U2); `dispose` mata os jobs e fecha os terminais do dono. `harness-agent::schedule`: domínio `~/.dsh/schedule.json` (U3, ilegível falha por inteiro), `after`/`at` (RFC 3339 ou hora local + fuso, gap de horário de verão recusado e sobreposição no primeiro instante)/`every` (≥ 300 s, alinhado à âncora)/`cron` (croner + chrono-tz, intervalo efetivo ≥ 5 min, fuso padrão do sistema), `schedule_create`/`list`/`delete`/`update` (aliases `CronCreate`/`CronList`/`CronDelete`) só na sessão raiz (R15/U6), entrega só com o agente ocioso, sem backlog, histórico de 30 dias/200 entregas, mensagem com framing U5 e conteúdo `<untrusted-content source="schedule">`; relógio injetável (`Clock`). `harness-tools::terminal`: `terminal_open`/`send`/`read`/`signal`/`close`/`list`, posse pelo agente criador, Job Object, ambiente sem credenciais, recusado em `read-only`. 6 testes de aceitação; `check.ps1 -Gnu` verde.
+**Decisão (2026-11-02):** o usuário escolheu tratar o terminal como o `Bash` (sem token restrito; Job Object + ambiente sem credenciais; recusado em `read-only`). 🟡 O ConPTY (`portable-pty` 0.9) não funcionou neste ambiente (nem `cmd /c echo` termina sob o toolchain GNU sem console), então o terminal usa **pipes**: `bash -i` com o marcador no `PS1` (stderr) e `pwsh -Command -` com uma linha marcadora após cada envio; uso orientado a linhas (R19).
+**Pendente:** ConPTY (reavaliar com o toolchain MSVC/OpenConsole, U7) e `terminal_signal` com Ctrl+C real (por pipe não chega; hoje orienta `terminal_close`); streaming da saída dos jobs (hoje a saída chega no fim; `job_output` devolve só a parte nova); ring de saída com leitura absoluta para observadores (U1); `dsh schedule install-task` (Agendador do Windows, R17) e toast (R16); modo `quiet` dos avisos.
 
 ---
 
