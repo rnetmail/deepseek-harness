@@ -329,7 +329,7 @@
       "at": "2026-11-01",
       "plan": "_reversa_sdd/reconstruction-plan.md",
       "tasks": 25,
-      "done": 13,
+      "done": 15,
       "code_dir_proposed": "D:/dsh/dsh-rs",
       "code_dir": "D:/dsh/dsh-rs",
       "task00": "done (GNU toolchain; MSVC pendente do Windows SDK)",
@@ -344,7 +344,9 @@
       "task09": "done",
       "task10": "done",
       "task11": "done",
-      "task12": "done"
+      "task12": "done",
+      "task13": "done",
+      "task14": "done"
     }
   },
   "created_files": [

@@ -3,7 +3,7 @@
 **Stack:** Rust (edition 2021, resolver 3), Cargo workspace com crates `harness-*` e binário `dsh`; tokio, reqwest (rustls + certificados do SO), serde, rusqlite (FTS5), zstd, rmcp, agent-client-protocol, ratatui, portable-pty, windows-rs, keyring, rquickjs, tree-sitter. Alvo principal: `x86_64-pc-windows-msvc`.
 **Diretório do código:** `D:\dsh\dsh-rs` (repositório novo; o `deepseek-harness` não é alterado).
 **Gerado em:** 2026-11-01
-**Status:** 25 tarefas | 13 concluídas | 12 pendentes
+**Status:** 25 tarefas | 15 concluídas | 10 pendentes
 
 ---
 
@@ -153,19 +153,25 @@
 ---
 
 ### Tarefa 13 — Cliente MCP e integrações gerenciadas
-**Status:** in_progress
+**Status:** done
 **Lê:** `_reversa_sdd/sdd/mcp-cliente-gerenciado.md`
 **Constrói:** `crates/harness-mcp` (rmcp stdio/http, reconexão, progresso, cancelamento, anotações, `${secret:}`), `crates/harness-integrations` (detecção de runtimes, install/update/doctor de REA, GBrain, Playwright, Chrome DevTools, cua-driver, csharp-ls, Gemini CLI; `NODE_OPTIONS=--use-system-ca`)
 **Pronto quando:** os 6 cenários de aceitação da spec passam
+**Resultado (2026-11-02):** `harness-mcp` sobre rmcp 3.8 (stdio com ambiente higienizado + Job Object, Streamable HTTP pelo reqwest/rustls do dsh; `sse` legado lido como http): config Claude Code com `${VAR}`, `${VAR:-padrão}` e `${secret:escopo/id}` (cofre), nomes `[A-Za-z0-9_-]{1,32}`, precedência gerenciadas < `~/.claude.json` < `.mcp.json` < plugins < `~/.dsh/mcp-servers.json`; máquina `connecting → initialized → lost → reconnecting → initialized|failed` com backoff 0,5 s ×2 até 30 s, 10 tentativas (R2); falha não fatal (R1); gate de rede pelos `guards` `mcp:<nome>` do `NetworkGate` (R13); `.mcp.json` não aprovado fica `needs_approval` (R14); timeout por servidor (padrão 60 s, REA 330 s) com `TOOL_TIMEOUT` e `cancelled`; progresso por `progressToken` limitado a 100 ms (R5); cancelamento do turno envia `notifications/cancelled` e preserva a observação parcial (R6); `structuredContent` validado contra `outputSchema` (R7); saída rotulada não confiável, reforçada por `_meta.provenance.untrusted_content` (R8); `readOnlyHint` → paralela, `destructiveHint` → `ask` na 1ª chamada da sessão salvo `allow` explícito, inclusive em `bypassPermissions` (R9, novo `Tool::destructive` e `PermissionEngine::explicitly_allowed`); instruções até 32 KiB (R10); resultado até 10 MiB (R11); `ListMcpResources`/`ReadMcpResource`. `harness-integrations`: catálogo das 7 integrações, detecção de Node/Bun/.NET/Chrome e pacotes npm globais, regra do REA (22.x ≥ 22.23.4, 24.x ≥ 24.22.1 ou ≥ 26.12.1), `missing_runtime` com a instrução winget (R15), instalação pelo canal oficial com saída visível e `NODE_OPTIONS=--use-system-ca` (R16/R16b), estado em `~/.dsh/integrations/state.json`, registro como servidor gerenciado reaproveitando a entrada do Claude Code (R17), REA com perfil compacto (R20), obrigatórias em vermelho (R21), .NET oferece csharp-ls (R22). CLI `dsh mcp list|get|add|remove|test` e `dsh integrations list|install|update|remove|doctor`. 9 testes de aceitação + 5 unitários; `check.ps1 -Gnu` verde.
+**Decisão (2026-11-02):** 🟡 computer use (Cua Driver) é instalação manual: o dsh detecta `cua-driver` e registra `cua-driver mcp` (como o dsh TS), sem instalar a extensão AGPL `cua-perception`. Node 25.x (o instalado hoje, 25.9.0) não atende a regra do REA.
+**Pendente:** OAuth do MCP remoto (descoberta + PKCE, Should); prompts MCP como `/mcp__srv__prompt` (Could); atualização automática semanal ociosa (R18, Could); registro do plugin do REA (Tarefa 16); `gbrain init --pglite` e instruções brain-first (Tarefa 15); matriz csharp-ls × .NET 7 (Tarefa 14); `/mcp` na TUI, eventos de progresso no ACP/SDK e injeção das ferramentas/instruções na sessão (Tarefa 21).
 
 ---
 
 ### Tarefa 14 — LSP (C# e índice PL/SQL)
-**Status:** pending
+**Status:** done
 **Lê:** `_reversa_sdd/sdd/lsp-csharp-plsql.md`
 **Constrói:** ferramenta `LSP`, cliente LSP, projeto auxiliar para `.cs` soltos, diagnósticos pós-edição, índice PL/SQL com tree-sitter + fallback
 **Pronto quando:** os 5 cenários de aceitação da spec passam
 **Alerta:** .NET 10 recomendado para o `csharp-ls` atual
+**Resultado (2026-11-02):** `harness-tools::lsp`: ferramenta `LSP` somente leitura com as 10 operações (R1, orientação do R5 na descrição), coordenadas 1-based, saída `caminho:linha:coluna` agrupada por arquivo (≤ 100 locais, ≤ 16.000 caracteres), timeout de 60 s com reinício do servidor; cliente LSP próprio (JSON-RPC `Content-Length`, respostas neutras às requisições do servidor, `publishDiagnostics`); servidores sob demanda por linguagem e raiz, encerrados após 10 min ociosos, consultas em série e `didOpen`/`didChange` a cada consulta (R2/R3); ambiente sem `*KEY*`/`*PASSWORD*`/`*SECRET*`/`*TOKEN*`/`DSH_*` e Job Object (R4); config `~/.dsh/lsp.toml` + `[lsp.*]` do `.dsh/workspace.toml`, com csharp-ls, rust-analyzer, typescript-language-server, pyright e gopls pré-configurados. C#: raiz pelo `.csproj`/`.sln` ou projeto auxiliar `.dsh/lsp/csharp/<hash>/Scratch.csproj` (TargetFramework pelo maior SDK, `reference_dirs` como `<Reference>`) sem tocar nos `.cs` (R9); diagnósticos `RM.*` não resolvidos filtrados sem `reference_dirs`, com aviso de resolução parcial (R10). PL/SQL: índice tree-sitter (`tree-sitter-plsql-sqry` 33.0.1, gramática AndreasMaierDe/tree-sitter-plsql, MIT) de pacotes, bodies, procedures, functions, triggers, types, cursores, variáveis e parâmetros com posição e assinatura, fallback por regex marcado `textual` (R13), SQLite `~/.dsh/index/plsql/<ws-hash>.db` incremental por mtime/tamanho e SHA-256 (R12), resolução `pacote.sub`/`schema.objeto`/nome solto com escopo local → pacote → workspace e todos os candidatos na ambiguidade, body antes da spec (R14), referências e hierarquia de chamadas aproximadas fora de comentários, diagnósticos só de sintaxe (R15), `catalog_enrich = off` responde "not found in the workspace" sem consulta ao banco. Diagnósticos pós-`Edit`/`Write` no pipeline: base antes da edição, só os novos (≤ 20), espera de até 3 s (R6). `harness-integrations`: matriz csharp-ls × .NET (0.10.0/net7, 0.16.0/net8, 0.20.0/net9, 0.28.0/net10), doctor com as duas opções (instalar .NET 10 ou fixar a versão compatível) e `install` fixando a versão com SDK antigo (R8). 5 cenários de aceitação + testes unitários; `check.ps1 -Gnu` verde.
+**Decisão (2026-11-02):** 🟡 cliente LSP próprio em vez de `async-lsp`/`tower-lsp` (só o subconjunto usado, sem dependências extras). 🟡 Contornos da gramática de 2022: `CREATE PROCEDURE|FUNCTION` avulso exige um segundo `END <nome>;` e não aceita `END;` (o dsh completa o nome e repete o fechamento, na mesma linha, só para o parse); `CREATE VIEW`, `:new/:old` e o `;` após o `END` de trigger não geram erro (lacunas filtradas, views indexadas pelo fallback); identificador de largura zero é tratado como token faltando.
+**Pendente:** validar no piloto com os 181 `.sql` e os `.cs` reais do Totvs AGP (uso dos dados liberado caso a caso) e com o csharp-ls de verdade (hoje SDK 7.0.202 → 0.10.0 ou instalar o .NET 10); enriquecimento pelo catálogo Oracle (R16, Could); XOML (R11, Won't); wiring do `Lsp` na sessão e diagnósticos na TUI (Tarefa 21).
 
 ---
 
