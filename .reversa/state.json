@@ -1,0 +1,422 @@
+{
+  "version": "1.0.0",
+  "project": "deepseek-harness",
+  "user_name": "Robson",
+  "chat_language": "pt-br",
+  "doc_language": "Português",
+  "answer_mode": "chat",
+  "doc_level": "completo",
+  "output_folder": "_reversa_sdd",
+  "phase": "concluido",
+  "completed": [
+    "reconhecimento",
+    "escavacao",
+    "interpretacao",
+    "geracao",
+    "revisao"
+  ],
+  "pending": [],
+  "engines": [
+    "claude-code"
+  ],
+  "agents": [
+    "reversa",
+    "reversa-scout",
+    "reversa-archaeologist",
+    "reversa-detective",
+    "reversa-architect",
+    "reversa-data-master",
+    "reversa-writer",
+    "reversa-reviewer",
+    "reversa-reconstructor"
+  ],
+  "goal": {
+    "summary": "Reconstruir um harness customizado como executável Rust, alternativa ao Claude Code quando o Claude não estiver disponível",
+    "requirements": [
+      "Binário único compilado em Rust",
+      "Provedores de modelos plugáveis: modelos gratuitos (listados automaticamente ou cadastrados manualmente) e modelos de assinaturas do usuário",
+      "Reaproveitamento automático de agentes, skills e conteúdo de D:/Projetos/Totvs AGP/VSCode (CLAUDE.md, .claude/agents, skills, CatalogoSKILLs etc.)",
+      "Paridade com as capacidades do Claude Code: ferramentas, subagentes, skills, hooks, MCP, memória, plan mode, compactação de contexto e permissões",
+      "Incorporar as funcionalidades do REA (https://github.com/morluto/rea, MIT): servidor MCP + CLI de engenharia reversa (binários nativos via Hopper/Ghidra/IDA/Kuna, JS/Electron, .NET, Android/JADX, web, HAR/pcap, firmware, formatos binários, captura de runtime, ambientes RL), skill/workflow e plugins .claude-plugin/.codex-plugin",
+      "Incorporar repositórios da organização CoreOS: (1) coreos/ai-helpers — marketplace de plugins Claude Code (.claude-plugin/marketplace.json, plugin.json, commands/*.md, skills/SKILL.md, hooks) → o harness Rust deve suportar o formato de plugin/marketplace do Claude Code e instalar ai-helpers; (2) ferramentas Rust do CoreOS (coreos-installer, afterburn, zincati, cargo-vendor-filterer…) → referência de arquitetura/crates e build reproduzível com vendoring filtrado",
+      "Incorporar GBrain (https://github.com/garrytan/gbrain, MIT): memória persistente para agentes — fatos com fonte, correção/retirada, busca keyword+semântica+híbrida, think com respostas citadas e gaps, grafo de conhecimento, markdown como fonte da verdade + PGLite/Postgres+pgvector, servidor MCP (gbrain serve), skills de memória, hooks e bloco de instruções brain-first; runtime Bun ≥1.4.4",
+      "Fluxo de dados unidirecional: o harness Rust nunca envia dados (logs, telemetria, inventário de plugins) para a DeepSeek; em sentido inverso, incorpora melhorias e correções do upstream deepseek-harness (acompanhamento de releases e porte seletivo)",
+      "Linguagens predominantes do Totvs AGP: PL/SQL e C# (sem servidor LSP configurado hoje)",
+      "REA como ferramenta transversal, utilizável em qualquer projeto/análise, recebendo como alvo uma URL web ou um caminho local (arquivo, pasta, binário, APK, pcap etc.)",
+      "Obrigatórios no harness Rust: browser use (Playwright MCP + Chrome DevTools MCP), computer use (Cua Driver ou equivalente) e agent teams",
+      "Assinatura do usuário: Google Gemini Pro (Google AI Pro). Prioridade de integração: Gemini nativo (API generateContent / google-generative-ai) + login Google por conta; delegação opcional ao Gemini CLI via ACP",
+      "Política de dados por provedor (data_policy) e allowed_providers por workspace: Totvs AGP (dados de RH/LGPD) restrito a provedores sem treinamento/retenção",
+      "CatalogoSKILLs automatizado: tudo o que for criado ou alterado em D:/Projetos/Totvs AGP/VSCode (.claude/skills, .claude/agents, .claude/commands, CLAUDE.md) é replicado automaticamente para o harness (sentido único VSCode → harness), e o pacote CatalogoSKILLs (cópia + zip) é gerado a partir de .claude/skills em vez de mantido à mão"
+    ],
+    "external_sources": [
+      "D:/Projetos/Totvs AGP/VSCode",
+      "https://github.com/morluto/rea",
+      "https://github.com/coreos/ai-helpers",
+      "https://github.com/coreos (crates Rust)",
+      "https://github.com/garrytan/gbrain"
+    ],
+    "decisions": [
+      {
+        "id": "rea-integration",
+        "status": "approved",
+        "text": "Integrar o REA como servidor MCP pré-registrado e gerenciado pelo harness Rust (instalação/atualização via npm, exige Node 22.23+), mais importação automática da skill e das workflow instructions; não portar os ~50 MB de TS para Rust. Itens de alto valor podem ganhar ferramentas nativas Rust depois.",
+        "approved_at": "2026-11-01"
+      },
+      {
+        "id": "claude-plugin-format",
+        "status": "approved",
+        "text": "Harness Rust lê e instala plugins no formato Claude Code (.claude-plugin/plugin.json + marketplace.json; commands, agents, skills, hooks, .mcp.json), cobrindo ai-helpers e os plugins do REA",
+        "approved_at": "2026-11-01"
+      },
+      {
+        "id": "gbrain-integration",
+        "status": "approved",
+        "text": "Integrar GBrain como servidor MCP pré-registrado e gerenciado pelo harness Rust (instalação/atualização via bun install -g github:garrytan/gbrain#latest-stable, engine PGLite local), como camada de memória persistente equivalente/superior à memória do Claude Code; importar suas skills e o bloco de instruções brain-first; módulo Memorable (compartilha dados com relay) desligado por padrão",
+        "approved_at": "2026-11-01"
+      },
+      {
+        "id": "no-outbound-deepseek",
+        "status": "approved",
+        "approved_at": "2026-11-01",
+        "text": "Harness Rust sem session-log-deepseek, plugin-package-inventory-deepseek e telemetria OTel; dsh atual com DSH_TELEMETRY_DISABLED=1 (variável de usuário definida em 2026-11-01); dsh atual: ~/.dsh/cordis.patch.yml com session-log-deepseek.enabled=false e plugin-package-inventory-deepseek.enabled=false (verificado via --dump-config em 2026-11-01)"
+      },
+      {
+        "id": "upstream-tracking",
+        "status": "approved",
+        "approved_at": "2026-11-01",
+        "text": "Acompanhar releases do deepseek-harness e portar melhorias/correções relevantes para o harness Rust (sentido upstream → Rust apenas)"
+      },
+      {
+        "id": "lsp-totvs",
+        "status": "approved",
+        "text": "Harness detecta o .NET já instalado e instala/atualiza csharp-ls (dotnet tool install -g csharp-ls) para C#; PL/SQL sem LSP dedicado: grep + índice de símbolos tree-sitter (packages/procedures/functions), LSP genérico opcional",
+        "approved_at": "2026-11-01"
+      },
+      {
+        "id": "experimental-mandatory",
+        "status": "approved",
+        "approved_at": "2026-11-01",
+        "text": "Browser use (Playwright MCP, Chrome DevTools MCP), computer use e agent teams são obrigatórios e ligados no harness Rust"
+      },
+      {
+        "id": "gemini-subscription",
+        "status": "approved",
+        "text": "Gemini Pro: (1) adapter nativo google-generative-ai (chave AI Studio, inclusive cota gratuita) ; (2) login Google OAuth estilo Gemini CLI para usar a cota da assinatura; (3) Gemini CLI como agente ACP delegável. Verificar termos de uso do OAuth fora do Gemini CLI | 2026-11-01: via 2 (OAuth Google) aprovada para implementação mesmo sem verificação dos termos (risco aceito pelo usuário); plano B de cota = limitar paralelismo por provedor (max_concurrent + fila).",
+        "approved_at": "2026-11-01"
+      },
+      {
+        "id": "totvs-data-gate",
+        "status": "approved",
+        "approved_at": "2026-11-01",
+        "text": "Uso de dados do Totvs AGP pelo harness é liberado pelo usuário caso a caso; alguns casos exigem estar na rede da empresa. Harness deve ter política por workspace (allowed_providers, data_policy) e verificação de rede corporativa (ex.: resolução de host interno/tnsping) antes de habilitar skills/MCP dependentes"
+      },
+      {
+        "id": "catalog-sync",
+        "status": "approved",
+        "approved_at": "2026-11-01",
+        "text": "Fonte canônica: .claude/* do workspace VSCode. O harness mantém um sync de sentido único (watcher + manifesto por hash SHA-256) para o registro global do harness, respeitando o totvs-data-gate (itens marcados como workspace-scoped não saem do workspace) e nunca copiando .claude/.env; CatalogoSKILLs vira artefato gerado (comando catalog build) e não fonte. Pacotes gerados: CatalogoSKILLs.zip e CatalogoSKILLs.7z (o .7z substitui o .rar, decisão de 2026-11-01)."
+      },
+      {
+        "id": "dsh-is-harness",
+        "status": "approved",
+        "approved_at": "2026-11-01",
+        "text": "O harness Rust é o novo dsh e o ÚNICO usado: um executável Rust (dsh.exe) com o mesmo nome e a mesma pasta ~/.dsh; o dsh TS (Node/pnpm) é aposentado e não roda em paralelo. CLI dsh <cmd>, config de workspace em .dsh/. Na primeira execução o dsh Rust migra o conteúdo existente de ~/.dsh: lê sessões v3 (mantém gravação v3, eventos novos marcados ignorable), importa a seção llm-pi-ai do settings.yaml e move as credenciais de .credentials.yaml para o cofre do SO (removendo o YAML só com confirmação). A trava de escrita entre processos usa o mesmo nome de semáforo do dsh TS por segurança, embora a convivência não seja um cenário de uso. Crates internos com prefixo harness-*.",
+        "updated_at": "2026-11-01"
+      },
+      {
+        "id": "review-answers",
+        "status": "approved",
+        "approved_at": "2026-11-01",
+        "text": "Q4 write_approved_models=\"*\" (todos os modelos; compat eval opcional); Q5 REA sem restrição legal; Q8 sem Authenticode: contorno (SHA-256/minisign + Unblock-File, dsh update sem MOTW, liberação por hash em AppLocker/WDAC); Q9 parâmetro retention.session_max_days (padrão 0)."
+      }
+    ],
+    "upstream_status": {
+      "checked_at": "2026-11-01",
+      "local_baseline": "dsh-v0.2.1-rc.5",
+      "target": "dsh-v0.2.1-rc.5",
+      "cycle1": "concluído; base avançada com confirmação do usuário em 2026-11-01",
+      "session_format": "v4",
+      "ledger": "_reversa_sdd/upstream/ledger.md",
+      "counts": {
+        "port": 38,
+        "adapt": 25,
+        "skip": 94,
+        "reject": 11
+      },
+      "previous_baseline": "0.1.6-alpha.1"
+    }
+  },
+  "checkpoints": {
+    "scout": {
+      "completed_at": "2026-11-01T19:59:21.731Z",
+      "files": [
+        "_reversa_sdd/inventory.md",
+        "_reversa_sdd/dependencies.md",
+        ".reversa/context/surface.json"
+      ]
+    },
+    "archaeologist": {
+      "modules_analyzed": [
+        "llm",
+        "core",
+        "session",
+        "context",
+        "compaction",
+        "skill",
+        "subagent",
+        "hooks",
+        "mcp",
+        "sandbox + guard",
+        "interaction",
+        "shell + subprocess",
+        "fs",
+        "plan + todo",
+        "workflow + goal",
+        "settings + credentials",
+        "preset",
+        "extensions + bundle + boot (composição cordis)",
+        "acp",
+        "jobs + schedule",
+        "web (fetch/search)",
+        "lsp + terminal",
+        "spill + storage + session-query",
+        "attachment + ptc-runtime",
+        "typert + api + sdk",
+        "vendor/cordis + util",
+        "apps/cli"
+      ],
+      "files": [
+        "_reversa_sdd/code-analysis.md",
+        "_reversa_sdd/data-dictionary.md",
+        ".reversa/context/modules.json",
+        "_reversa_sdd/flowcharts/llm.md",
+        "_reversa_sdd/flowcharts/core.md",
+        "_reversa_sdd/flowcharts/session.md",
+        "_reversa_sdd/flowcharts/compaction.md",
+        "_reversa_sdd/flowcharts/extensibility.md",
+        "_reversa_sdd/flowcharts/execution.md",
+        "_reversa_sdd/flowcharts/composition.md"
+      ],
+      "modules_pending": [],
+      "updated_at": "2026-11-01T23:38:08.805Z",
+      "external_analyzed": [
+        "morluto/rea",
+        "coreos/ai-helpers",
+        "coreos Rust tools",
+        "garrytan/gbrain"
+      ],
+      "status": "complete"
+    },
+    "data_master": {
+      "status": "complete",
+      "files": [
+        "_reversa_sdd/database/data-dictionary.md",
+        "_reversa_sdd/database/erd.md",
+        "_reversa_sdd/database/relationships.md",
+        "_reversa_sdd/database/business-rules.md"
+      ],
+      "media": 6,
+      "sqlite_tables": 8
+    },
+    "detective": {
+      "status": "complete",
+      "files": [
+        "_reversa_sdd/domain.md",
+        "_reversa_sdd/state-machines.md",
+        "_reversa_sdd/permissions.md",
+        "_reversa_sdd/adrs/"
+      ],
+      "rules": 23,
+      "adrs": 16,
+      "state_machines": 10,
+      "gaps": [
+        "hooks GBrain"
+      ]
+    },
+    "totvs_inventory": {
+      "status": "complete",
+      "date": "2026-11-01",
+      "file": "_reversa_sdd/totvs-agp-inventory.md",
+      "agents": 7,
+      "skills": 24,
+      "mcp": [
+        "gpflow (http)"
+      ],
+      "requirements": 15,
+      "critical": [
+        "R2 agents",
+        "R3 agent-memory",
+        "R4 model map",
+        "R5 .claude/skills",
+        "R7 deny .env",
+        "R15 aderência à governança"
+      ],
+      "catalogo": "CatalogoSKILLs = cópia idêntica de 8 skills de .claude/skills + arquivos zip/rar (distribuição/backup); fonte canônica = .claude/skills",
+      "open": [
+        "cota Gemini Pro para 7 agentes: medir com token-meter/uso real (desconhecido)"
+      ]
+    },
+    "architect": {
+      "status": "complete",
+      "files": [
+        "_reversa_sdd/architecture.md",
+        "_reversa_sdd/c4-context.md",
+        "_reversa_sdd/c4-containers.md",
+        "_reversa_sdd/c4-components.md",
+        "_reversa_sdd/erd-complete.md",
+        "_reversa_sdd/traceability/spec-impact-matrix.md"
+      ],
+      "rust_crates": 13,
+      "integrations": 11,
+      "tech_debts": 11
+    },
+    "writer": {
+      "status": "complete",
+      "at": "2026-11-01",
+      "specs": 17,
+      "openapi": 0,
+      "user_stories": 4,
+      "matrix": "traceability/code-spec-matrix.md",
+      "coverage": {
+        "packages": 284,
+        "covered": 136,
+        "partial": 29,
+        "none": 119,
+        "out_of_scope": 96,
+        "scope_coverage": "88%"
+      },
+      "open_gaps": [
+        "termos OAuth Google (via 2 Gemini)",
+        "cota Gemini Pro 7 agentes",
+        "texto brain-first do GBrain",
+        "bateria compat eval + write_approved_models",
+        "driver computer use no Windows",
+        "matriz csharp-ls x .NET 7",
+        "jurídico REA em binários TOTVS",
+        "upstream 0.1.6-alpha.1 → 0.2.1-rc.5"
+      ]
+    },
+    "reviewer": {
+      "status": "complete",
+      "at": "2026-11-01",
+      "specs_reviewed": 20,
+      "complementary_specs": [
+        "sdd/configuracao-dsh-home.md",
+        "sdd/build-release.md",
+        "sdd/retencao-anexos-spill.md"
+      ],
+      "cross_review": "não (Codex indisponível)",
+      "reclassifications": {
+        "red_to_green": 5,
+        "red_to_yellow": 2,
+        "green_to_yellow": 2,
+        "yellow_to_green": 3
+      },
+      "questions": {
+        "generated": 9,
+        "answered": 9,
+        "pending": []
+      },
+      "confidence": "78%",
+      "next": [
+        "upstream-sync 0.1.6-alpha.1 → dsh-v0.2.1-rc.5",
+        "Reconstructor (opcional)"
+      ],
+      "red_remaining": 0
+    },
+    "reconstructor": {
+      "status": "planned",
+      "at": "2026-11-01",
+      "plan": "_reversa_sdd/reconstruction-plan.md",
+      "tasks": 25,
+      "done": 6,
+      "code_dir_proposed": "D:/dsh/dsh-rs",
+      "code_dir": "D:/dsh/dsh-rs",
+      "task00": "done (GNU toolchain; MSVC pendente do Windows SDK)",
+      "task01": "done",
+      "task02": "done",
+      "task03": "done",
+      "task04": "done",
+      "task05": "done",
+      "task06": "in_progress (núcleo escrito: names, schema, tool, fsobs, spill, guard; faltam pipeline, hooks, ferramentas e testes)"
+    }
+  },
+  "created_files": [
+    ".reversa/state.json",
+    ".reversa/plan.md",
+    "_reversa_sdd/inventory.md",
+    "_reversa_sdd/dependencies.md",
+    ".reversa/context/surface.json",
+    "_reversa_sdd/code-analysis.md",
+    "_reversa_sdd/data-dictionary.md",
+    ".reversa/context/modules.json",
+    "_reversa_sdd/flowcharts/llm.md",
+    "_reversa_sdd/flowcharts/core.md",
+    "_reversa_sdd/flowcharts/session.md",
+    "_reversa_sdd/flowcharts/compaction.md",
+    "_reversa_sdd/flowcharts/extensibility.md",
+    "_reversa_sdd/flowcharts/execution.md",
+    "_reversa_sdd/flowcharts/composition.md"
+  ],
+  "redator_progress": {
+    "plan": [
+      "sdd/agent-loop-sessao.md",
+      "sdd/provedores-modelos.md",
+      "sdd/ferramentas-claude-code.md",
+      "sdd/compat-claude-code-totvs.md",
+      "sdd/catalog-sync.md",
+      "sdd/plugins-marketplace.md",
+      "sdd/mcp-cliente-gerenciado.md",
+      "sdd/rea.md",
+      "sdd/memoria-gbrain.md",
+      "sdd/browser-computer-agent-teams.md",
+      "sdd/lsp-csharp-plsql.md",
+      "sdd/seguranca-sandbox-permissoes.md",
+      "sdd/subagentes-skills-hooks.md",
+      "sdd/compactacao-contexto.md",
+      "sdd/superficies-tui-headless-acp-sdk.md",
+      "sdd/jobs-schedule-terminal.md",
+      "sdd/upstream-sync.md",
+      "user-stories/fallback-quando-claude-indisponivel.md",
+      "user-stories/trabalhar-no-totvs-agp.md",
+      "user-stories/nova-skill-replicada.md",
+      "user-stories/analise-com-rea.md",
+      "traceability/code-spec-matrix.md"
+    ],
+    "done": [
+      "sdd/agent-loop-sessao.md",
+      "sdd/provedores-modelos.md",
+      "sdd/ferramentas-claude-code.md",
+      "sdd/compat-claude-code-totvs.md",
+      "sdd/catalog-sync.md",
+      "sdd/plugins-marketplace.md",
+      "sdd/mcp-cliente-gerenciado.md",
+      "sdd/rea.md",
+      "sdd/memoria-gbrain.md",
+      "sdd/browser-computer-agent-teams.md",
+      "sdd/lsp-csharp-plsql.md",
+      "sdd/seguranca-sandbox-permissoes.md",
+      "sdd/subagentes-skills-hooks.md",
+      "sdd/compactacao-contexto.md",
+      "sdd/superficies-tui-headless-acp-sdk.md",
+      "sdd/jobs-schedule-terminal.md",
+      "sdd/upstream-sync.md",
+      "user-stories/fallback-quando-claude-indisponivel.md",
+      "user-stories/trabalhar-no-totvs-agp.md",
+      "user-stories/nova-skill-replicada.md",
+      "user-stories/analise-com-rea.md",
+      "traceability/code-spec-matrix.md"
+    ],
+    "confirmed": true,
+    "notes": [
+      "dsh-is-harness aplicado às specs 1 e 2; artefatos do Architect (c4-containers HOME ~/.harness) ajustados"
+    ]
+  },
+  "environment": {
+    "bun": "1.4.4 (winget, 2026-11-01)",
+    "gbrain": "0.60.544.0 instalado via bun -g (sem setup; nada gravado em ~/.claude)",
+    "rust": "1.99.1 stable-x86_64-pc-windows-msvc (rustup via winget)",
+    "mingw": "winlibs GCC 16.2.0 / MinGW-w64 14.0.0 UCRT r3 em %LOCALAPPDATA%/Programs/winlibs",
+    "cargo_deny": "0.20.2"
+  }
+}

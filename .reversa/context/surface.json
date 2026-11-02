@@ -1,0 +1,1064 @@
+{
+  "generated_at": "2026-11-01T19:57:54.389Z",
+  "project_root": "D:/dsh/deepseek-harness",
+  "languages": [
+    {
+      "name": "TypeScript",
+      "extensions": [
+        ".ts",
+        ".tsx",
+        ".mts"
+      ],
+      "file_count": 4027
+    },
+    {
+      "name": "Markdown",
+      "extensions": [
+        ".md"
+      ],
+      "file_count": 3443
+    },
+    {
+      "name": "YAML",
+      "extensions": [
+        ".yaml",
+        ".yml"
+      ],
+      "file_count": 1986
+    },
+    {
+      "name": "JSON/JSONL",
+      "extensions": [
+        ".json",
+        ".jsonl"
+      ],
+      "file_count": 1332
+    },
+    {
+      "name": "CSS",
+      "extensions": [
+        ".css"
+      ],
+      "file_count": 149
+    },
+    {
+      "name": "JavaScript",
+      "extensions": [
+        ".mjs",
+        ".js",
+        ".cjs"
+      ],
+      "file_count": 102
+    },
+    {
+      "name": "Python",
+      "extensions": [
+        ".py"
+      ],
+      "file_count": 22
+    },
+    {
+      "name": "C/C++",
+      "extensions": [
+        ".c",
+        ".cpp"
+      ],
+      "file_count": 5
+    },
+    {
+      "name": "Shell/Batch",
+      "extensions": [
+        ".sh",
+        ".cmd"
+      ],
+      "file_count": 10
+    }
+  ],
+  "primary_language": "TypeScript",
+  "frameworks": [
+    {
+      "name": "Node.js",
+      "version": "^22.19.0 || >=24.0.0",
+      "source": "package.json engines"
+    },
+    {
+      "name": "pnpm (workspaces)",
+      "version": "11.7.0",
+      "source": "package.json"
+    },
+    {
+      "name": "TypeScript",
+      "version": "^6.0.3",
+      "source": "package.json"
+    },
+    {
+      "name": "cordis (vendored, plugin/DI container)",
+      "version": "vendor/cordis",
+      "source": "vendor/cordis"
+    },
+    {
+      "name": "zod",
+      "version": "^4.4.3",
+      "source": "packages/*"
+    },
+    {
+      "name": "React",
+      "version": "^18.2.0",
+      "source": "apps/web, packages/client"
+    },
+    {
+      "name": "Vite",
+      "version": "^6.0.0",
+      "source": "apps/web"
+    },
+    {
+      "name": "Electron",
+      "version": "^44.0.0",
+      "source": "apps/desktop"
+    },
+    {
+      "name": "commander",
+      "version": "^15.0.0",
+      "source": "apps/cli"
+    },
+    {
+      "name": "@earendil-works/pi-ai (multi-provider LLM catalog)",
+      "version": "^0.85.1",
+      "source": "packages/llm/llm-pi-ai"
+    },
+    {
+      "name": "@modelcontextprotocol/client",
+      "version": "2.0.0",
+      "source": "packages/mcp/mcp-client"
+    },
+    {
+      "name": "@agentclientprotocol/sdk",
+      "version": "1.4.0",
+      "source": "packages/acp/acp"
+    },
+    {
+      "name": "@anthropic-ai/claude-agent-sdk",
+      "version": "0.3.263",
+      "source": "packages/subagent/subagent-claude-code"
+    },
+    {
+      "name": "@openai/codex",
+      "version": "0.153.4",
+      "source": "packages/subagent/subagent-codex"
+    },
+    {
+      "name": "node-pty",
+      "version": "1.2.0-beta.15",
+      "source": "packages/subprocess/subprocess-local"
+    },
+    {
+      "name": "koffi (FFI)",
+      "version": "^3.1.0",
+      "source": "packages/fs, sandbox, subprocess"
+    },
+    {
+      "name": "Vitest",
+      "version": "^4.1.8",
+      "source": "package.json"
+    },
+    {
+      "name": "tsdown",
+      "version": "^0.22.2",
+      "source": "package.json"
+    }
+  ],
+  "package_manager": "pnpm",
+  "entry_points": [
+    {
+      "path": "apps/cli/src/bin.ts",
+      "type": "cli_entry (bin: dsh -> apps/cli/lib/bin.js)"
+    },
+    {
+      "path": "apps/cli/src/args.ts",
+      "type": "cli_args"
+    },
+    {
+      "path": "packages/bundle/base/cordis.patch.yml",
+      "type": "base_composition"
+    },
+    {
+      "path": "packages/bundle/web-app/cordis.patch.yml",
+      "type": "profile:web"
+    },
+    {
+      "path": "packages/bundle/headless/cordis.patch.yml",
+      "type": "profile:headless"
+    },
+    {
+      "path": "packages/bundle/acp-app/cordis.patch.yml",
+      "type": "profile:acp"
+    },
+    {
+      "path": "packages/bundle/sdk-app/cordis.patch.yml",
+      "type": "profile:sdk"
+    },
+    {
+      "path": "packages/bundle/sdk-minimal/cordis.patch.yml",
+      "type": "profile:sdk-minimal"
+    },
+    {
+      "path": "apps/desktop/src",
+      "type": "electron_main"
+    },
+    {
+      "path": "apps/web/index.html",
+      "type": "web_frontend"
+    },
+    {
+      "path": "python/sdk/src",
+      "type": "python_sdk"
+    },
+    {
+      "path": "dsh.cmd",
+      "type": "local_launcher (Windows, contém segredos)"
+    }
+  ],
+  "config_files": [
+    "package.json",
+    "pnpm-workspace.yaml",
+    "tsconfig*.json",
+    "tsdown.config.ts",
+    "vitest*.config.ts",
+    ".oxlintrc.json",
+    "lefthook.yml",
+    "apps/cli/config/examples/{cordis,github-review,mcp-memory,schedule}",
+    "~/.dsh (DSH_HOME): settings, credentials, sessões"
+  ],
+  "ci_cd": [
+    ".github/workflows/ci.yml",
+    ".github/workflows/ci-master.yml",
+    ".github/workflows/e2e.yml",
+    ".github/workflows/pi-ai-provider-e2e.yml",
+    ".github/workflows/sandbox.yml",
+    ".github/workflows/release.yml",
+    ".github/workflows/release-publish.yml",
+    ".github/workflows/python-release.yml",
+    ".github/workflows/node-addon-system.yml",
+    ".gitlab-ci.yml"
+  ],
+  "database_hints": [
+    {
+      "path": "packages/session/session-persistence-jsonl",
+      "type": "jsonl_session_log"
+    },
+    {
+      "path": "packages/session/session-format*",
+      "type": "session_schema_migrations_v0_to_v3"
+    },
+    {
+      "path": "packages/storage/storage-sqlite",
+      "type": "sqlite (node:sqlite)"
+    },
+    {
+      "path": "packages/session-query/session-query-sqlite",
+      "type": "sqlite_query_index"
+    },
+    {
+      "path": "packages/storage/storage-json",
+      "type": "json_store"
+    },
+    {
+      "path": "packages/settings/settings-file",
+      "type": "yaml_settings"
+    },
+    {
+      "path": "packages/credentials/credentials-local",
+      "type": "yaml_credentials"
+    }
+  ],
+  "test_framework": "Vitest (unit, e2e, snapshot, web, bench) + pytest (python)",
+  "test_file_count": 1125,
+  "modules": [
+    "llm",
+    "core",
+    "session",
+    "context",
+    "compaction",
+    "skill",
+    "subagent",
+    "hooks",
+    "mcp",
+    "sandbox",
+    "guard",
+    "interaction",
+    "shell",
+    "subprocess",
+    "fs",
+    "plan",
+    "todo",
+    "workflow",
+    "goal",
+    "settings",
+    "credentials",
+    "preset",
+    "extensions",
+    "acp",
+    "jobs",
+    "schedule",
+    "web",
+    "lsp",
+    "terminal",
+    "spill",
+    "storage",
+    "session-query",
+    "attachment",
+    "ptc-runtime",
+    "boot",
+    "bundle",
+    "typert",
+    "api",
+    "sdk",
+    "util",
+    "vendor",
+    "app:cli",
+    "app:desktop",
+    "app:desktop-host",
+    "app:web",
+    "browser-use",
+    "client",
+    "computer-use",
+    "experimental",
+    "feedback",
+    "host",
+    "identity",
+    "runtime-diagnostics",
+    "ssh",
+    "test-support",
+    "webhook",
+    "workspace",
+    "native",
+    "python"
+  ],
+  "module_details": {
+    "app:cli": {
+      "packages": [
+        "apps/cli"
+      ],
+      "src": 56,
+      "test": 10
+    },
+    "app:desktop": {
+      "packages": [
+        "apps/desktop"
+      ],
+      "src": 40,
+      "test": 31
+    },
+    "app:desktop-host": {
+      "packages": [
+        "apps/desktop-host"
+      ],
+      "src": 3,
+      "test": 0
+    },
+    "app:web": {
+      "packages": [
+        "apps/web"
+      ],
+      "src": 124,
+      "test": 2
+    },
+    "acp": {
+      "packages": [
+        "packages/acp/acp"
+      ],
+      "src": 8,
+      "test": 11
+    },
+    "api": {
+      "packages": [
+        "packages/api/gateway",
+        "packages/api/remotes",
+        "packages/api/session-controller",
+        "packages/api/settings-controller",
+        "packages/api/terminal-controller",
+        "packages/api/workspace-controller",
+        "packages/api/workspace-files"
+      ],
+      "src": 93,
+      "test": 69
+    },
+    "attachment": {
+      "packages": [
+        "packages/attachment/attachment",
+        "packages/attachment/attachment-local"
+      ],
+      "src": 15,
+      "test": 13
+    },
+    "boot": {
+      "packages": [
+        "packages/boot/app-boot",
+        "packages/boot/cmdline"
+      ],
+      "src": 9,
+      "test": 11
+    },
+    "browser-use": {
+      "packages": [
+        "packages/browser-use/browser-use"
+      ],
+      "src": 2,
+      "test": 1
+    },
+    "bundle": {
+      "packages": [
+        "packages/bundle/acp-app",
+        "packages/bundle/base",
+        "packages/bundle/headless",
+        "packages/bundle/sdk-app",
+        "packages/bundle/sdk-minimal",
+        "packages/bundle/web-app"
+      ],
+      "src": 12,
+      "test": 13
+    },
+    "client": {
+      "packages": [
+        "packages/client/connection",
+        "packages/client/file-upload",
+        "packages/client/hmr",
+        "packages/client/locale",
+        "packages/client/modules",
+        "packages/client/resources",
+        "packages/client/store",
+        "packages/client/ui-agent-preset",
+        "packages/client/ui-approval",
+        "packages/client/ui-attachment",
+        "packages/client/ui-brand-official",
+        "packages/client/ui-chat",
+        "packages/client/ui-commands",
+        "packages/client/ui-conversation",
+        "packages/client/ui-deliverables",
+        "packages/client/ui-directory-picker-browse",
+        "packages/client/ui-directory-picker-native",
+        "packages/client/ui-dockkit",
+        "packages/client/ui-goal",
+        "packages/client/ui-input-trigger",
+        "packages/client/ui-jobs",
+        "packages/client/ui-layout",
+        "packages/client/ui-message-feedback",
+        "packages/client/ui-model-selection",
+        "packages/client/ui-open-in-app",
+        "packages/client/ui-permission-presets",
+        "packages/client/ui-plan",
+        "packages/client/ui-primitives",
+        "packages/client/ui-reference",
+        "packages/client/ui-renderer",
+        "packages/client/ui-schedule",
+        "packages/client/ui-session",
+        "packages/client/ui-settings",
+        "packages/client/ui-settings-general",
+        "packages/client/ui-settings-models",
+        "packages/client/ui-settings-plugin-inventory",
+        "packages/client/ui-settings-plugins",
+        "packages/client/ui-settings-unarchive-sessions",
+        "packages/client/ui-sidebar",
+        "packages/client/ui-sidebar-documentpreview",
+        "packages/client/ui-sidebar-files",
+        "packages/client/ui-sidebar-right",
+        "packages/client/ui-sidebar-terminal",
+        "packages/client/ui-skill",
+        "packages/client/ui-slots",
+        "packages/client/ui-subagent",
+        "packages/client/ui-theme",
+        "packages/client/ui-tool",
+        "packages/client/ui-trajectory",
+        "packages/client/ui-user-questions",
+        "packages/client/ui-workflow-run",
+        "packages/client/ui-workspace",
+        "packages/client/web"
+      ],
+      "src": 766,
+      "test": 377
+    },
+    "compaction": {
+      "packages": [
+        "packages/compaction/command-compact",
+        "packages/compaction/compaction",
+        "packages/compaction/compaction-basic",
+        "packages/compaction/compaction-image-offload",
+        "packages/compaction/compaction-tool-result-pruner"
+      ],
+      "src": 20,
+      "test": 13
+    },
+    "computer-use": {
+      "packages": [
+        "packages/computer-use/computer-use"
+      ],
+      "src": 2,
+      "test": 1
+    },
+    "context": {
+      "packages": [
+        "packages/context/agent-instructions",
+        "packages/context/file-reference",
+        "packages/context/file-reference-local",
+        "packages/context/session-reference",
+        "packages/context/time-context",
+        "packages/context/tmux-context"
+      ],
+      "src": 29,
+      "test": 10
+    },
+    "core": {
+      "packages": [
+        "packages/core/agent",
+        "packages/core/agent-default-model",
+        "packages/core/agent-loop",
+        "packages/core/agent-tool-presentation",
+        "packages/core/scope",
+        "packages/core/session",
+        "packages/core/system-prompt",
+        "packages/core/tools"
+      ],
+      "src": 51,
+      "test": 67
+    },
+    "credentials": {
+      "packages": [
+        "packages/credentials/authorization",
+        "packages/credentials/credentials",
+        "packages/credentials/credentials-local"
+      ],
+      "src": 9,
+      "test": 10
+    },
+    "experimental": {
+      "packages": [
+        "packages/experimental/agent-team",
+        "packages/experimental/agent-team-profile",
+        "packages/experimental/agent-team-web-profile",
+        "packages/experimental/auto-review",
+        "packages/experimental/browser-use-chrome-devtools-mcp",
+        "packages/experimental/browser-use-playwright-mcp",
+        "packages/experimental/browser-use-runtime",
+        "packages/experimental/browser-use-stagehand-native",
+        "packages/experimental/client-ui-agent-team",
+        "packages/experimental/computer-use-cua-driver-mcp",
+        "packages/experimental/computer-use-cua-driver-native",
+        "packages/experimental/inspector",
+        "packages/experimental/ptc-runtime-python",
+        "packages/experimental/tool-agent-team",
+        "packages/experimental/webworker-packer",
+        "packages/experimental/webworker-runtime"
+      ],
+      "src": 303,
+      "test": 89
+    },
+    "extensions": {
+      "packages": [
+        "packages/extensions/cordis-client-runner",
+        "packages/extensions/cordis-host-runner",
+        "packages/extensions/tool-cordis",
+        "packages/extensions/ui-cordis"
+      ],
+      "src": 43,
+      "test": 15
+    },
+    "feedback": {
+      "packages": [
+        "packages/feedback/command-feedback",
+        "packages/feedback/message-feedback"
+      ],
+      "src": 5,
+      "test": 4
+    },
+    "fs": {
+      "packages": [
+        "packages/fs/fs",
+        "packages/fs/fs-local",
+        "packages/fs/fs-observation-policy",
+        "packages/fs/fs-sandbox",
+        "packages/fs/tool-fs",
+        "packages/fs/tool-fs-search",
+        "packages/fs/tool-present",
+        "packages/fs/tool-str-replace-editor"
+      ],
+      "src": 34,
+      "test": 22
+    },
+    "goal": {
+      "packages": [
+        "packages/goal/command-goal",
+        "packages/goal/goal",
+        "packages/goal/goal-round-driver",
+        "packages/goal/tool-goal"
+      ],
+      "src": 18,
+      "test": 7
+    },
+    "guard": {
+      "packages": [
+        "packages/guard/repeat-tool-reminder",
+        "packages/guard/timeout-policy"
+      ],
+      "src": 2,
+      "test": 2
+    },
+    "hooks": {
+      "packages": [
+        "packages/hooks/hook-protocol",
+        "packages/hooks/hooks-claude-code",
+        "packages/hooks/hooks-codex"
+      ],
+      "src": 15,
+      "test": 18
+    },
+    "host": {
+      "packages": [
+        "packages/host/directory-picker",
+        "packages/host/directory-picker-auto",
+        "packages/host/directory-picker-browse",
+        "packages/host/directory-picker-native",
+        "packages/host/frontend-static",
+        "packages/host/open-in-app",
+        "packages/host/plugin-inventory",
+        "packages/host/webserver"
+      ],
+      "src": 28,
+      "test": 16
+    },
+    "identity": {
+      "packages": [
+        "packages/identity/anonymous-user-id"
+      ],
+      "src": 1,
+      "test": 1
+    },
+    "interaction": {
+      "packages": [
+        "packages/interaction/commands",
+        "packages/interaction/permission-presets",
+        "packages/interaction/tool-ask-user",
+        "packages/interaction/user-approval",
+        "packages/interaction/user-questions"
+      ],
+      "src": 15,
+      "test": 9
+    },
+    "jobs": {
+      "packages": [
+        "packages/jobs/jobs",
+        "packages/jobs/jobs-local",
+        "packages/jobs/tool-jobs"
+      ],
+      "src": 6,
+      "test": 5
+    },
+    "llm": {
+      "packages": [
+        "packages/llm/deepseek-llm-api-extensions",
+        "packages/llm/llm",
+        "packages/llm/llm-deepseek",
+        "packages/llm/llm-pi-ai",
+        "packages/llm/llm-retry",
+        "packages/llm/plugin-package-inventory-deepseek",
+        "packages/llm/token-meter"
+      ],
+      "src": 84,
+      "test": 56
+    },
+    "lsp": {
+      "packages": [
+        "packages/lsp/lsp",
+        "packages/lsp/lsp-stdio",
+        "packages/lsp/tool-lsp"
+      ],
+      "src": 17,
+      "test": 12
+    },
+    "mcp": {
+      "packages": [
+        "packages/mcp/mcp-client",
+        "packages/mcp/mcp-resources"
+      ],
+      "src": 13,
+      "test": 10
+    },
+    "plan": {
+      "packages": [
+        "packages/plan/plan-mode"
+      ],
+      "src": 4,
+      "test": 4
+    },
+    "preset": {
+      "packages": [
+        "packages/preset/agent-presets",
+        "packages/preset/persona"
+      ],
+      "src": 13,
+      "test": 13
+    },
+    "ptc-runtime": {
+      "packages": [
+        "packages/ptc-runtime/ptc-runtime",
+        "packages/ptc-runtime/ptc-runtime-node"
+      ],
+      "src": 18,
+      "test": 14
+    },
+    "runtime-diagnostics": {
+      "packages": [
+        "packages/runtime-diagnostics/invariants"
+      ],
+      "src": 1,
+      "test": 1
+    },
+    "sandbox": {
+      "packages": [
+        "packages/sandbox/sandbox",
+        "packages/sandbox/sandbox-local",
+        "packages/sandbox/sandbox-policy",
+        "packages/sandbox/sandbox-windows-acl"
+      ],
+      "src": 26,
+      "test": 22
+    },
+    "schedule": {
+      "packages": [
+        "packages/schedule/schedule"
+      ],
+      "src": 11,
+      "test": 8
+    },
+    "sdk": {
+      "packages": [
+        "packages/sdk/client",
+        "packages/sdk/protocol",
+        "packages/sdk/server"
+      ],
+      "src": 14,
+      "test": 7
+    },
+    "session": {
+      "packages": [
+        "packages/session/session-checkpoint-policy",
+        "packages/session/session-format",
+        "packages/session/session-format-catalog",
+        "packages/session/session-format-v0-to-v1",
+        "packages/session/session-format-v1-to-v2",
+        "packages/session/session-format-v2-to-v3",
+        "packages/session/session-log-deepseek",
+        "packages/session/session-persistence",
+        "packages/session/session-persistence-jsonl",
+        "packages/session/session-projection",
+        "packages/session/session-projection-cache",
+        "packages/session/session-stats",
+        "packages/session/session-telemetry",
+        "packages/session/session-telemetry-otel",
+        "packages/session/session-title",
+        "packages/session/session-title-all-prompts-llm",
+        "packages/session/session-title-first-prompt-llm",
+        "packages/session/session-title-llm",
+        "packages/session/session-turn-outline"
+      ],
+      "src": 94,
+      "test": 64
+    },
+    "session-query": {
+      "packages": [
+        "packages/session-query/session-log-export",
+        "packages/session-query/session-query",
+        "packages/session-query/session-query-sqlite",
+        "packages/session-query/tool-session-query"
+      ],
+      "src": 32,
+      "test": 16
+    },
+    "settings": {
+      "packages": [
+        "packages/settings/settings",
+        "packages/settings/settings-file"
+      ],
+      "src": 7,
+      "test": 8
+    },
+    "shell": {
+      "packages": [
+        "packages/shell/bash-local",
+        "packages/shell/bash-sandbox",
+        "packages/shell/pwsh-local",
+        "packages/shell/pwsh-sandbox",
+        "packages/shell/shell",
+        "packages/shell/shell-env",
+        "packages/shell/tool-bash",
+        "packages/shell/tool-bash-persistent",
+        "packages/shell/tool-pwsh",
+        "packages/shell/tool-pwsh-persistent"
+      ],
+      "src": 26,
+      "test": 23
+    },
+    "skill": {
+      "packages": [
+        "packages/skill/skill",
+        "packages/skill/skill-badge",
+        "packages/skill/skill-filesystem",
+        "packages/skill/tool-skill"
+      ],
+      "src": 4,
+      "test": 5
+    },
+    "spill": {
+      "packages": [
+        "packages/spill/spill",
+        "packages/spill/spill-local",
+        "packages/spill/spill-policy"
+      ],
+      "src": 8,
+      "test": 5
+    },
+    "ssh": {
+      "packages": [
+        "packages/ssh/fs-ssh",
+        "packages/ssh/sandbox-ssh",
+        "packages/ssh/ssh",
+        "packages/ssh/subprocess-ssh"
+      ],
+      "src": 13,
+      "test": 27
+    },
+    "storage": {
+      "packages": [
+        "packages/storage/storage",
+        "packages/storage/storage-domain",
+        "packages/storage/storage-json",
+        "packages/storage/storage-sqlite"
+      ],
+      "src": 20,
+      "test": 5
+    },
+    "subagent": {
+      "packages": [
+        "packages/subagent/subagent",
+        "packages/subagent/subagent-acp",
+        "packages/subagent/subagent-claude-code",
+        "packages/subagent/subagent-codex",
+        "packages/subagent/subagent-dsh-sdk",
+        "packages/subagent/subagent-fork-in-process",
+        "packages/subagent/subagent-in-process-driver",
+        "packages/subagent/subagent-spawn-in-process",
+        "packages/subagent/tool-subagent",
+        "packages/subagent/tool-subagent-control"
+      ],
+      "src": 77,
+      "test": 35
+    },
+    "subprocess": {
+      "packages": [
+        "packages/subprocess/subprocess",
+        "packages/subprocess/subprocess-local",
+        "packages/subprocess/win32-process"
+      ],
+      "src": 32,
+      "test": 22
+    },
+    "terminal": {
+      "packages": [
+        "packages/terminal/terminal",
+        "packages/terminal/terminal-bash",
+        "packages/terminal/tool-terminal"
+      ],
+      "src": 8,
+      "test": 10
+    },
+    "test-support": {
+      "packages": [
+        "packages/test-support/agent-loop-testkit",
+        "packages/test-support/client-runtime",
+        "packages/test-support/llm-mock-server",
+        "packages/test-support/llm-replay",
+        "packages/test-support/loader-smoke",
+        "packages/test-support/remote-mock",
+        "packages/test-support/session-snapshot"
+      ],
+      "src": 58,
+      "test": 32
+    },
+    "todo": {
+      "packages": [
+        "packages/todo/tool-todo"
+      ],
+      "src": 4,
+      "test": 5
+    },
+    "typert": {
+      "packages": [
+        "packages/typert/generator",
+        "packages/typert/loader",
+        "packages/typert/protocol",
+        "packages/typert/registry"
+      ],
+      "src": 18,
+      "test": 11
+    },
+    "util": {
+      "packages": [
+        "packages/util/atomic-write",
+        "packages/util/brand",
+        "packages/util/chunked-list",
+        "packages/util/crypto",
+        "packages/util/deque",
+        "packages/util/home-paths",
+        "packages/util/http-proxy",
+        "packages/util/launch-environment",
+        "packages/util/lazy-require",
+        "packages/util/native-command",
+        "packages/util/output-retention",
+        "packages/util/package-manifest",
+        "packages/util/time",
+        "packages/util/timeout",
+        "packages/util/values",
+        "packages/util/workspace-path"
+      ],
+      "src": 23,
+      "test": 18
+    },
+    "web": {
+      "packages": [
+        "packages/web/tool-web",
+        "packages/web/web",
+        "packages/web/web-fetch-http",
+        "packages/web/web-search-deepseek",
+        "packages/web/web-search-exa",
+        "packages/web/web-search-perplexity"
+      ],
+      "src": 23,
+      "test": 15
+    },
+    "webhook": {
+      "packages": [
+        "packages/webhook/webhook",
+        "packages/webhook/webhook-github"
+      ],
+      "src": 9,
+      "test": 8
+    },
+    "workflow": {
+      "packages": [
+        "packages/workflow/tool-ralph",
+        "packages/workflow/tool-workflow",
+        "packages/workflow/workflow",
+        "packages/workflow/workflow-ptc"
+      ],
+      "src": 21,
+      "test": 14
+    },
+    "workspace": {
+      "packages": [
+        "packages/workspace/workspace"
+      ],
+      "src": 6,
+      "test": 2
+    },
+    "native": {
+      "packages": [
+        "native/system",
+        "native/system/packages/darwin-arm64",
+        "native/system/packages/darwin-x64",
+        "native/system/packages/entry",
+        "native/system/packages/linux-arm64",
+        "native/system/packages/linux-x64"
+      ],
+      "src": 3,
+      "test": 0
+    },
+    "vendor": {
+      "packages": [
+        "vendor/cordis",
+        "vendor/cosmokit",
+        "vendor/group",
+        "vendor/hmr",
+        "vendor/include",
+        "vendor/loader",
+        "vendor/logger-console",
+        "vendor/schemastery",
+        "vendor/timer"
+      ],
+      "src": 34,
+      "test": 0
+    },
+    "python": {
+      "packages": [
+        "python/sdk-runtime"
+      ],
+      "src": 0,
+      "test": 0
+    }
+  },
+  "rust_goal_priority": {
+    "core_agent": [
+      "llm",
+      "core",
+      "session",
+      "context",
+      "compaction",
+      "skill",
+      "subagent",
+      "hooks",
+      "mcp",
+      "sandbox",
+      "guard",
+      "interaction",
+      "shell",
+      "subprocess",
+      "fs",
+      "plan",
+      "todo",
+      "workflow",
+      "goal",
+      "settings",
+      "credentials",
+      "preset"
+    ],
+    "secondary": [
+      "extensions",
+      "acp",
+      "jobs",
+      "schedule",
+      "web",
+      "lsp",
+      "terminal",
+      "spill",
+      "storage",
+      "session-query",
+      "attachment",
+      "ptc-runtime",
+      "boot",
+      "bundle",
+      "typert",
+      "api",
+      "sdk",
+      "util",
+      "vendor",
+      "app:cli"
+    ],
+    "ui_low": [
+      "client",
+      "app:web",
+      "app:desktop",
+      "app:desktop-host",
+      "host",
+      "experimental",
+      "feedback",
+      "identity",
+      "webhook",
+      "ssh",
+      "browser-use",
+      "computer-use",
+      "runtime-diagnostics",
+      "test-support",
+      "native",
+      "python"
+    ]
+  },
+  "total_files": 11245
+}

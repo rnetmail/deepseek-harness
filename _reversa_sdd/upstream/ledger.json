@@ -1,0 +1,1528 @@
+{
+  "baseline": "0.1.6-alpha.1",
+  "target": "dsh-v0.2.1-rc.5",
+  "generated_at": "2026-11-01",
+  "status": "confirmed",
+  "counts": {
+    "port": 38,
+    "skip": 94,
+    "adapt": 25,
+    "reject": 11
+  },
+  "items": [
+    {
+      "path": "implemented/architecture/2026-09-03-jobs-seam-consolidation.md",
+      "title": "One output ring, one projection, one event stream for background jobs",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "port",
+      "spec": "sdd/jobs-schedule-terminal.md",
+      "reason": "jobs, agenda, terminal"
+    },
+    {
+      "path": "implemented/architecture/2026-09-08-desktop-welcome-window-material.md",
+      "title": "Desktop welcome window material",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/architecture/2026-09-09-producer-owned-message-sources.md",
+      "title": "Producer-owned message sources at the V4 edge",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "port",
+      "spec": "sdd/agent-loop-sessao.md",
+      "reason": "formato de sessão v4 / persistência"
+    },
+    {
+      "path": "implemented/architecture/2026-09-10-component-factories-and-local-slots.md",
+      "title": "Reusable component factories with local slots",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/architecture/2026-09-10-desktop-web-wrapper.md",
+      "title": "Run Desktop through the shared Web application",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/architecture/2026-09-13-session-working-directory.md",
+      "title": "Session working directory",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "port",
+      "spec": "sdd/seguranca-sandbox-permissoes.md",
+      "reason": "segurança, credenciais, cwd"
+    },
+    {
+      "path": "implemented/architecture/2026-09-14-current-profile-plugin-management.md",
+      "title": "Current-profile plugin management shares CLI transactions",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "adapt",
+      "spec": "sdd/plugins-marketplace.md",
+      "reason": "mercado de plugins do dsh (formato próprio) × formato Claude Code"
+    },
+    {
+      "path": "implemented/architecture/2026-09-14-deepseek-account-login.md",
+      "title": "DeepSeek account browser login",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "reject",
+      "spec": "—",
+      "reason": "envio de dados ou conta/serviço DeepSeek (ADR 101); fetch/search via DeepSeek substituído por provedores sem custo"
+    },
+    {
+      "path": "implemented/architecture/2026-09-14-independent-libreoffice-kit.md",
+      "title": "Independent LibreOffice kit ownership",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/architecture/2026-09-14-web-document-relative-app-routes.md",
+      "title": "Web app-owned routes are document-relative",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/architecture/2026-09-15-bounded-office-conversion.md",
+      "title": "Bounded shared Office conversion",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/architecture/2026-09-15-client-session-references.md",
+      "title": "Client Session references, reference sources, and UI status",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/architecture/2026-09-15-desktop-native-fatal-recovery.md",
+      "title": "Native Desktop fatal recovery",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/architecture/2026-09-15-first-class-tool-role-messages.md",
+      "title": "First-class tool-role messages",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "port",
+      "spec": "sdd/agent-loop-sessao.md",
+      "reason": "formato de sessão v4 / persistência"
+    },
+    {
+      "path": "implemented/architecture/2026-09-15-guided-plugin-installation.md",
+      "title": "Guided plugin installation",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "adapt",
+      "spec": "sdd/plugins-marketplace.md",
+      "reason": "mercado de plugins do dsh (formato próprio) × formato Claude Code"
+    },
+    {
+      "path": "implemented/architecture/2026-09-16-creator-persistent-plugin-management.md",
+      "title": "Creator mode installs persistent plugin bundles",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "adapt",
+      "spec": "sdd/plugins-marketplace.md",
+      "reason": "mercado de plugins do dsh (formato próprio) × formato Claude Code"
+    },
+    {
+      "path": "implemented/architecture/2026-09-16-experimental-voice-input.md",
+      "title": "Experimental voice input with explicit recognition providers",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/architecture/2026-09-16-host-schedule-storage.md",
+      "title": "Host-owned scheduled messages",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "port",
+      "spec": "sdd/jobs-schedule-terminal.md",
+      "reason": "jobs, agenda, terminal"
+    },
+    {
+      "path": "implemented/architecture/2026-09-16-user-terminal-permissions.md",
+      "title": "User-terminal permissions",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "port",
+      "spec": "sdd/seguranca-sandbox-permissoes.md",
+      "reason": "segurança, credenciais, cwd"
+    },
+    {
+      "path": "implemented/architecture/2026-09-17-account-provider-signout.md",
+      "title": "Account provider and active request cancellation",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "reject",
+      "spec": "—",
+      "reason": "envio de dados ou conta/serviço DeepSeek (ADR 101); fetch/search via DeepSeek substituído por provedores sem custo"
+    },
+    {
+      "path": "implemented/architecture/2026-09-17-developer-session-changes.md",
+      "title": "Developer messages for incremental session changes",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "port",
+      "spec": "sdd/agent-loop-sessao.md",
+      "reason": "formato de sessão v4 / persistência"
+    },
+    {
+      "path": "implemented/architecture/2026-09-17-experimental-cua-object-api.md",
+      "title": "Native CUA objects independent of evaluator ownership",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "adapt",
+      "spec": "sdd/browser-computer-agent-teams.md",
+      "reason": "times, worktree e computer use"
+    },
+    {
+      "path": "implemented/architecture/2026-09-17-native-v4-read-validation.md",
+      "title": "Mandatory native V4 relationship validation",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "port",
+      "spec": "sdd/agent-loop-sessao.md",
+      "reason": "formato de sessão v4 / persistência"
+    },
+    {
+      "path": "implemented/architecture/2026-09-17-persistence-attribution-policy.md",
+      "title": "Recorded user-source attribution compatibility",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "port",
+      "spec": "sdd/agent-loop-sessao.md",
+      "reason": "formato de sessão v4 / persistência"
+    },
+    {
+      "path": "implemented/architecture/2026-09-17-process-local-blank-sessions.md",
+      "title": "Writer acquisition for blank Session reuse",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "port",
+      "spec": "sdd/agent-loop-sessao.md",
+      "reason": "formato de sessão v4 / persistência"
+    },
+    {
+      "path": "implemented/architecture/2026-09-17-workspace-file-binary-transfer.md",
+      "title": "Binary workspace file transfer",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/architecture/2026-09-18-declarative-agent-presets.md",
+      "title": "Declarative Agent presets and retained revisions",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "adapt",
+      "spec": "sdd/subagentes-skills-hooks.md",
+      "reason": "presets e subagentes (mapear para .claude/agents)"
+    },
+    {
+      "path": "implemented/architecture/2026-09-18-plugin-install-registries.md",
+      "title": "Plugin install registries",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "adapt",
+      "spec": "sdd/plugins-marketplace.md",
+      "reason": "mercado de plugins do dsh (formato próprio) × formato Claude Code"
+    },
+    {
+      "path": "implemented/architecture/2026-09-18-volatile-config-references.md",
+      "title": "Volatile configuration references",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "perfis/cordis/HMR (substituídos por config TOML)"
+    },
+    {
+      "path": "implemented/architecture/2026-09-19-concrete-web-bind-address.md",
+      "title": "Bind one concrete Web address",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/architecture/2026-09-19-profile-owned-live-configuration.md",
+      "title": "Keep live configuration in the owning profile",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "perfis/cordis/HMR (substituídos por config TOML)"
+    },
+    {
+      "path": "implemented/architecture/2026-09-19-profile-resolution-lookup-order.md",
+      "title": "Resolve profile modules along the ancestor chain with an interception layer",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "perfis/cordis/HMR (substituídos por config TOML)"
+    },
+    {
+      "path": "implemented/architecture/2026-09-19-projection-cache-listing-identity-and-cached-rows.md",
+      "title": "Projection cache read-only face matches the lifecycle identity; the client store separates cached and sequenced rows",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "perfis/cordis/HMR (substituídos por config TOML)"
+    },
+    {
+      "path": "implemented/architecture/2026-09-19-remote-duplex-stream.md",
+      "title": "Remote duplex stream: one kind of stream, an uplink channel, and an invocation context",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/architecture/2026-09-19-timed-user-question-two-settlements.md",
+      "title": "Timed user questions as two settlements",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "port",
+      "spec": "sdd/ferramentas-claude-code.md",
+      "reason": "pipeline e ferramentas"
+    },
+    {
+      "path": "implemented/architecture/2026-09-19-window-drag-coverage-contract.md",
+      "title": "Window drag coverage as a contract",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/architecture/2026-09-20-device-local-shortcut-preferences.md",
+      "title": "Keep shortcut preferences device-local and commit before activation",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/architecture/2026-09-20-dynamic-tool-updates.md",
+      "title": "Active tool headers and stateful request projection",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "port",
+      "spec": "sdd/ferramentas-claude-code.md",
+      "reason": "pipeline e ferramentas"
+    },
+    {
+      "path": "implemented/architecture/2026-09-20-sidebar-retained-tab-layout.md",
+      "title": "Stable Sidebar tab mounting and Session retention",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/architecture/2026-09-21-conversation-build-groups.md",
+      "title": "Definition-owned grouping with generic Node/Group assembly",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/architecture/2026-09-21-desktop-page-close-shortcuts.md",
+      "title": "Desktop close shortcuts follow page focus",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/architecture/2026-09-21-experimental-capabilities-as-optional-bundles.md",
+      "title": "Ship experimental capabilities as optional bundles",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "adapt",
+      "spec": "sdd/plugins-marketplace.md",
+      "reason": "mercado de plugins do dsh (formato próprio) × formato Claude Code"
+    },
+    {
+      "path": "implemented/architecture/2026-09-22-fatal-diagnostics-and-crash-reports.md",
+      "title": "Fatal diagnostics and Desktop crash reports",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "adapt",
+      "spec": "sdd/build-release.md",
+      "reason": "diagnóstico de falhas fatais (sem crash report remoto)"
+    },
+    {
+      "path": "implemented/architecture/2026-09-22-platform-browser-storage.md",
+      "title": "Account-scoped Platform browser storage",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "reject",
+      "spec": "—",
+      "reason": "envio de dados ou conta/serviço DeepSeek (ADR 101); fetch/search via DeepSeek substituído por provedores sem custo"
+    },
+    {
+      "path": "implemented/architecture/2026-09-22-schedule-hard-delete-and-bounded-history.md",
+      "title": "Schedule deletes task rows and bounds delivery history",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "port",
+      "spec": "sdd/jobs-schedule-terminal.md",
+      "reason": "jobs, agenda, terminal"
+    },
+    {
+      "path": "implemented/architecture/2026-09-22-tool-call-three-phases.md",
+      "title": "Tool calls own preparation, dispatch, and results by callId",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "port",
+      "spec": "sdd/ferramentas-claude-code.md",
+      "reason": "pipeline e ferramentas"
+    },
+    {
+      "path": "implemented/architecture/2026-09-23-best-effort-persistent-ptc.md",
+      "title": "Node PTC execution modes and in-memory state",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "port",
+      "spec": "sdd/ferramentas-claude-code.md",
+      "reason": "pipeline e ferramentas"
+    },
+    {
+      "path": "implemented/architecture/2026-09-23-desktop-close-to-background-and-quit-confirmation.md",
+      "title": "Hide the Desktop window on close and confirm interruptible quits",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/architecture/2026-09-23-native-https-web-listener.md",
+      "title": "Native HTTPS on the Web listener",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/architecture/2026-09-24-bounded-session-log-upload.md",
+      "title": "Bounded DeepSeek Session-log upload",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "reject",
+      "spec": "—",
+      "reason": "envio de dados ou conta/serviço DeepSeek (ADR 101); fetch/search via DeepSeek substituído por provedores sem custo"
+    },
+    {
+      "path": "implemented/architecture/2026-09-24-deepseek-account-remote-model-catalog.md",
+      "title": "DeepSeek account models come from the account listing and gate by client version",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "reject",
+      "spec": "—",
+      "reason": "envio de dados ou conta/serviço DeepSeek (ADR 101); fetch/search via DeepSeek substituído por provedores sem custo"
+    },
+    {
+      "path": "implemented/architecture/2026-09-24-preparing-tool-arguments.md",
+      "title": "Incremental tool-argument scanning and argument order during preparation",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "port",
+      "spec": "sdd/ferramentas-claude-code.md",
+      "reason": "pipeline e ferramentas"
+    },
+    {
+      "path": "implemented/architecture/2026-09-24-preset-scoped-schedule-tools.md",
+      "title": "Preset-scoped Schedule tools",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "port",
+      "spec": "sdd/jobs-schedule-terminal.md",
+      "reason": "jobs, agenda, terminal"
+    },
+    {
+      "path": "implemented/architecture/2026-09-24-preset-scoped-time-context.md",
+      "title": "Preset-scoped time context",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "adapt",
+      "spec": "sdd/subagentes-skills-hooks.md",
+      "reason": "presets e subagentes (mapear para .claude/agents)"
+    },
+    {
+      "path": "implemented/architecture/2026-09-24-scheduled-message-framing.md",
+      "title": "Delivered reminders are framed as scheduled messages from the user",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "port",
+      "spec": "sdd/jobs-schedule-terminal.md",
+      "reason": "jobs, agenda, terminal"
+    },
+    {
+      "path": "implemented/architecture/2026-09-25-session-log-otel-byte-limits.md",
+      "title": "Session-log OTLP strings and bounded requests",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "reject",
+      "spec": "—",
+      "reason": "envio de dados ou conta/serviço DeepSeek (ADR 101); fetch/search via DeepSeek substituído por provedores sem custo"
+    },
+    {
+      "path": "implemented/architecture/2026-09-26-cua-application-consent.md",
+      "title": "Application consent for native Computer Use",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "adapt",
+      "spec": "sdd/browser-computer-agent-teams.md",
+      "reason": "times, worktree e computer use"
+    },
+    {
+      "path": "implemented/architecture/2026-09-27-progressive-office-skills.md",
+      "title": "Progressive Office skills with ordinary shell execution",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/architecture/2026-09-29-explicit-session-history-preparation.md",
+      "title": "Open the Session when migration is required",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "port",
+      "spec": "sdd/agent-loop-sessao.md",
+      "reason": "formato de sessão v4 / persistência"
+    },
+    {
+      "path": "implemented/architecture/2026-09-30-profile-package-refresh-and-manifest-invalidation.md",
+      "title": "Refresh runtime resolution after package operations and expire HMR package configuration",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "perfis/cordis/HMR (substituídos por config TOML)"
+    },
+    {
+      "path": "implemented/architecture/2026-09-30-structured-draft-initialization.md",
+      "title": "Initial draft content and structured reference restoration",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "simplificação/teste interno do TS, sem efeito no contrato"
+    },
+    {
+      "path": "implemented/architecture/2026-10-01-replace-changed-package-modules-on-recomposition.md",
+      "title": "Replace plugins whose loaded package files changed during profile recomposition",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "perfis/cordis/HMR (substituídos por config TOML)"
+    },
+    {
+      "path": "implemented/architecture/2026-10-05-anonymous-reasoning-translation.md",
+      "title": "Anonymous translation remains separate from model history",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "reject",
+      "spec": "—",
+      "reason": "envio de dados ou conta/serviço DeepSeek (ADR 101); fetch/search via DeepSeek substituído por provedores sem custo"
+    },
+    {
+      "path": "implemented/architecture/2026-10-05-official-on-demand-bundles.md",
+      "title": "Discover Official bundles without installing their runtimes",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "adapt",
+      "spec": "sdd/plugins-marketplace.md",
+      "reason": "mercado de plugins do dsh (formato próprio) × formato Claude Code"
+    },
+    {
+      "path": "implemented/architecture/2026-10-05-paid-native-flash-reasoning-translation.md",
+      "title": "Paid native Flash translation uses independent queries",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "reject",
+      "spec": "—",
+      "reason": "envio de dados ou conta/serviço DeepSeek (ADR 101); fetch/search via DeepSeek substituído por provedores sem custo"
+    },
+    {
+      "path": "implemented/architecture/2026-10-05-persistent-machine-translation.md",
+      "title": "Machine translation results use shared Session records",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "reject",
+      "spec": "—",
+      "reason": "envio de dados ou conta/serviço DeepSeek (ADR 101); fetch/search via DeepSeek substituído por provedores sem custo"
+    },
+    {
+      "path": "implemented/architecture/2026-10-05-shared-agents-root-instructions.md",
+      "title": "Shared agents root joins the user-global instruction chain",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "port",
+      "spec": "sdd/compat-claude-code-totvs.md",
+      "reason": "instruções e contexto de runtime"
+    },
+    {
+      "path": "implemented/architecture/2026-10-06-web-desktop-plugin-identity-compatibility.md",
+      "title": "Preserve Web and Desktop plugin identities across experimental consolidation",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/architecture/2026-10-08-desktop-shell-configuration.md",
+      "title": "Desktop shell configuration independent of the Host",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/architecture/2026-10-08-persistent-ptc-sandbox.md",
+      "title": "Retained PTC processes follow file policy",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "port",
+      "spec": "sdd/ferramentas-claude-code.md",
+      "reason": "pipeline e ferramentas"
+    },
+    {
+      "path": "implemented/architecture/2026-10-09-composer-command-chip.md",
+      "title": "Claimed commands as atomic composer chips",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/architecture/2026-10-09-cua-shared-native-helper.md",
+      "title": "Shared native CUA process with Agent-scoped state",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "adapt",
+      "spec": "sdd/browser-computer-agent-teams.md",
+      "reason": "times, worktree e computer use"
+    },
+    {
+      "path": "implemented/architecture/2026-10-09-message-node-factories-and-delegates.md",
+      "title": "Domain image Slots and a shared gallery Factory",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/architecture/2026-10-09-operator-scoped-connect-handshake.md",
+      "title": "Peer-scoped connect handshake",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/architecture/2026-10-09-ptc-owned-policy-cleanup.md",
+      "title": "PTC owns policy-change cleanup waits",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "port",
+      "spec": "sdd/ferramentas-claude-code.md",
+      "reason": "pipeline e ferramentas"
+    },
+    {
+      "path": "implemented/architecture/2026-10-09-reasoning-content-slot-factory.md",
+      "title": "Standard reasoning Body Slot and reusable Content Factory",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/architecture/2026-10-09-stored-credential-precedence.md",
+      "title": "Stored credentials take precedence over the launch environment",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "port",
+      "spec": "sdd/seguranca-sandbox-permissoes.md",
+      "reason": "segurança, credenciais, cwd"
+    },
+    {
+      "path": "implemented/architecture/2026-10-10-user-text-json-nodes.md",
+      "title": "User-text candidate scheduling and Facts-driven refresh",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/architecture/2026-10-11-chat-group-tree-exchanges.md",
+      "title": "Chat group-tree positions and exchanges",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/architecture/2026-10-12-exclusive-conversation-matches.md",
+      "title": "Exclusive Conversation matches",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/architecture/2026-10-12-headless-environment-auth.md",
+      "title": "Headless jobs omit the interactive credential store",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "port",
+      "spec": "sdd/seguranca-sandbox-permissoes.md",
+      "reason": "segurança, credenciais, cwd"
+    },
+    {
+      "path": "implemented/architecture/2026-10-12-peer-principal-and-remote-access.md",
+      "title": "Peer principals and method-level Remote access control",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/architecture/2026-10-13-chat-single-fold-motion.md",
+      "title": "One fold motion for collapsing on the next message",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/architecture/2026-10-13-context-breakdown-system-prompt-state.md",
+      "title": "Context breakdown retains only system prompts",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "port",
+      "spec": "sdd/compat-claude-code-totvs.md",
+      "reason": "instruções e contexto de runtime"
+    },
+    {
+      "path": "implemented/architecture/2026-10-13-cua-continuous-hover.md",
+      "title": "Continuous CUA hover without cross-call ownership",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "adapt",
+      "spec": "sdd/browser-computer-agent-teams.md",
+      "reason": "times, worktree e computer use"
+    },
+    {
+      "path": "implemented/architecture/2026-10-13-cua-hover-routes-and-coordinates.md",
+      "title": "Background hover and screenshot coordinates",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "adapt",
+      "spec": "sdd/browser-computer-agent-teams.md",
+      "reason": "times, worktree e computer use"
+    },
+    {
+      "path": "implemented/architecture/2026-10-13-team-identity-runtime-context.md",
+      "title": "Team identity in required runtime context",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "adapt",
+      "spec": "sdd/browser-computer-agent-teams.md",
+      "reason": "times, worktree e computer use"
+    },
+    {
+      "path": "implemented/architecture/2026-10-14-plugin-entry-customization.md",
+      "title": "Plugin entry customization: region-owned pins and More menus",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/architecture/2026-10-14-webworker-preview-profile-parity.md",
+      "title": "Boot the Preview Worker from the shipped profile and fetch lazy chunks on demand",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/architecture/2026-10-20-new-session-blank-reuse-by-preset.md",
+      "title": "New Session reuses a blank Session, matching a requested preset",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "port",
+      "spec": "sdd/agent-loop-sessao.md",
+      "reason": "formato de sessão v4 / persistência"
+    },
+    {
+      "path": "implemented/architecture/2026-10-22-deepseek-official-model-listing.md",
+      "title": "The official DeepSeek route follows the official model listing until its catalog is customized",
+      "kind": "architecture",
+      "status": "implemented",
+      "decision": "reject",
+      "spec": "—",
+      "reason": "envio de dados ou conta/serviço DeepSeek (ADR 101); fetch/search via DeepSeek substituído por provedores sem custo"
+    },
+    {
+      "path": "implemented/bug-fix/2026-09-06-packed-install-private-npm-cache.md",
+      "title": "Packed-install verification owns its npm cache",
+      "kind": "bug-fix",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "sdd/build-release.md",
+      "reason": "processo do repositório TS; ideias úteis só para build/CI"
+    },
+    {
+      "path": "implemented/bug-fix/2026-09-15-authenticated-browser-host-preferences.md",
+      "title": "Share Host preferences with every authenticated browser",
+      "kind": "bug-fix",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/bug-fix/2026-09-15-client-session-blank-reconciliation.md",
+      "title": "Keep accepted Session presentation across list refreshes",
+      "kind": "bug-fix",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/bug-fix/2026-09-20-session-open-read-coordination.md",
+      "title": "Session opening cache identity and read ordering",
+      "kind": "bug-fix",
+      "status": "implemented",
+      "decision": "port",
+      "spec": "sdd/agent-loop-sessao.md",
+      "reason": "formato de sessão v4 / persistência"
+    },
+    {
+      "path": "implemented/bug-fix/2026-09-27-pwsh-prompt-tail-grace.md",
+      "title": "A seen prompt marker keeps its own tail grace",
+      "kind": "bug-fix",
+      "status": "implemented",
+      "decision": "port",
+      "spec": "sdd/jobs-schedule-terminal.md",
+      "reason": "jobs, agenda, terminal"
+    },
+    {
+      "path": "implemented/bug-fix/2026-09-28-pty-bundled-console-host.md",
+      "title": "Windows persistent PTYs use the console host node-pty ships",
+      "kind": "bug-fix",
+      "status": "implemented",
+      "decision": "port",
+      "spec": "sdd/jobs-schedule-terminal.md",
+      "reason": "jobs, agenda, terminal"
+    },
+    {
+      "path": "implemented/bug-fix/2026-09-29-reused-blank-runs-requested-preset.md",
+      "title": "A reused blank Session runs the requested preset",
+      "kind": "bug-fix",
+      "status": "implemented",
+      "decision": "port",
+      "spec": "sdd/agent-loop-sessao.md",
+      "reason": "formato de sessão v4 / persistência"
+    },
+    {
+      "path": "implemented/bug-fix/2026-09-30-job-session-lifecycle.md",
+      "title": "Persist owned job lifecycle facts",
+      "kind": "bug-fix",
+      "status": "implemented",
+      "decision": "port",
+      "spec": "sdd/jobs-schedule-terminal.md",
+      "reason": "jobs, agenda, terminal"
+    },
+    {
+      "path": "implemented/bug-fix/2026-09-30-session-list-host-fairness.md",
+      "title": "Time-sliced Session-list work",
+      "kind": "bug-fix",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/bug-fix/2026-10-10-background-shell-command-display.md",
+      "title": "Separate background Shell command display from job state",
+      "kind": "bug-fix",
+      "status": "implemented",
+      "decision": "port",
+      "spec": "sdd/jobs-schedule-terminal.md",
+      "reason": "jobs, agenda, terminal"
+    },
+    {
+      "path": "implemented/bug-fix/2026-10-11-process-specific-prompt-values-in-runtime-context.md",
+      "title": "Process-specific checkout path and Web URL move to runtime context",
+      "kind": "bug-fix",
+      "status": "implemented",
+      "decision": "port",
+      "spec": "sdd/compat-claude-code-totvs.md",
+      "reason": "instruções e contexto de runtime"
+    },
+    {
+      "path": "implemented/feature/2026-09-13-explicit-worktree-creation.md",
+      "title": "Explicit worktree creation",
+      "kind": "feature",
+      "status": "implemented",
+      "decision": "adapt",
+      "spec": "sdd/browser-computer-agent-teams.md",
+      "reason": "times, worktree e computer use"
+    },
+    {
+      "path": "implemented/feature/2026-09-14-desktop-primary-runtime.md",
+      "title": "Desktop primary runtime",
+      "kind": "feature",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/feature/2026-09-14-unattended-browser-terminal-reclamation.md",
+      "title": "Two-hour reclamation of unattended browser terminals",
+      "kind": "feature",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/feature/2026-09-16-browser-excel-preview.md",
+      "title": "Browser Excel preview with saved formula results",
+      "kind": "feature",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/feature/2026-09-16-sidebar-browser.md",
+      "title": "Sandboxed Sidebar browser",
+      "kind": "feature",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/feature/2026-09-17-sidebar-file-and-directory-auto-refresh.md",
+      "title": "On-demand watching and automatic refresh for Sidebar previews and file trees",
+      "kind": "feature",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/feature/2026-09-19-windows-acl-mandatory-integrity-confinement.md",
+      "title": "Windows sandbox delete confinement: mandatory integrity plus an ambient-delete deny",
+      "kind": "feature",
+      "status": "implemented",
+      "decision": "port",
+      "spec": "sdd/seguranca-sandbox-permissoes.md",
+      "reason": "segurança, credenciais, cwd"
+    },
+    {
+      "path": "implemented/feature/2026-09-20-config-schema-dump-validation-policy.md",
+      "title": "Config schema dump validation policy",
+      "kind": "feature",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "perfis/cordis/HMR (substituídos por config TOML)"
+    },
+    {
+      "path": "implemented/feature/2026-09-20-desktop-browser-webview.md",
+      "title": "Retained Desktop browser webviews",
+      "kind": "feature",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/feature/2026-09-20-spawn-agent-preset-selection.md",
+      "title": "Independent spawn preset selection and restoration",
+      "kind": "feature",
+      "status": "implemented",
+      "decision": "adapt",
+      "spec": "sdd/subagentes-skills-hooks.md",
+      "reason": "presets e subagentes (mapear para .claude/agents)"
+    },
+    {
+      "path": "implemented/feature/2026-09-21-archive-stops-running-session-work.md",
+      "title": "Archiving a Session with running work",
+      "kind": "feature",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "fora do escopo atual (candidatos futuros)"
+    },
+    {
+      "path": "implemented/feature/2026-09-22-archive-admission-reads-stored-tasks.md",
+      "title": "Archive admission reads the stored tasks",
+      "kind": "feature",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "fora do escopo atual (candidatos futuros)"
+    },
+    {
+      "path": "implemented/feature/2026-09-24-auto-review-user-approval-fallback.md",
+      "title": "Auto review asks the user after a denial",
+      "kind": "feature",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "fora do escopo atual (candidatos futuros)"
+    },
+    {
+      "path": "implemented/feature/2026-09-24-session-inspector.md",
+      "title": "Session Inspector data ownership and navigation",
+      "kind": "feature",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "fora do escopo atual (candidatos futuros)"
+    },
+    {
+      "path": "implemented/feature/2026-10-02-plugin-market-discover.md",
+      "title": "Plugin market Discover page and index reader",
+      "kind": "feature",
+      "status": "implemented",
+      "decision": "adapt",
+      "spec": "sdd/plugins-marketplace.md",
+      "reason": "mercado de plugins do dsh (formato próprio) × formato Claude Code"
+    },
+    {
+      "path": "implemented/feature/2026-10-02-plugin-market-index-format.md",
+      "title": "Plugin market index format",
+      "kind": "feature",
+      "status": "implemented",
+      "decision": "adapt",
+      "spec": "sdd/plugins-marketplace.md",
+      "reason": "mercado de plugins do dsh (formato próprio) × formato Claude Code"
+    },
+    {
+      "path": "implemented/feature/2026-10-14-built-in-plugin-feature-previews.md",
+      "title": "Built-in plugin feature previews",
+      "kind": "feature",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/feature/2026-10-14-host-release-change-refresh-prompt.md",
+      "title": "Prompt to reload when the Host release changes instead of hot-replacing across releases",
+      "kind": "feature",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/feature/2026-10-15-deepseek-search-fetch-api.md",
+      "title": "Direct DeepSeek Search and Fetch APIs",
+      "kind": "feature",
+      "status": "implemented",
+      "decision": "reject",
+      "spec": "—",
+      "reason": "envio de dados ou conta/serviço DeepSeek (ADR 101); fetch/search via DeepSeek substituído por provedores sem custo"
+    },
+    {
+      "path": "implemented/process/2026-09-14-generated-cli-help-reference.md",
+      "title": "Generate the CLI reference from command help",
+      "kind": "process",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "sdd/build-release.md",
+      "reason": "processo do repositório TS; ideias úteis só para build/CI"
+    },
+    {
+      "path": "implemented/process/2026-09-15-shipped-optional-bundles.md",
+      "title": "Ship optional bundles with the installation",
+      "kind": "process",
+      "status": "implemented",
+      "decision": "adapt",
+      "spec": "sdd/plugins-marketplace.md",
+      "reason": "mercado de plugins do dsh (formato próprio) × formato Claude Code"
+    },
+    {
+      "path": "implemented/process/2026-09-17-persistence-schema-review.md",
+      "title": "Persistence schema policy and review",
+      "kind": "process",
+      "status": "implemented",
+      "decision": "port",
+      "spec": "sdd/agent-loop-sessao.md",
+      "reason": "formato de sessão v4 / persistência"
+    },
+    {
+      "path": "implemented/process/2026-09-17-windows-runtime-signature-cache.md",
+      "title": "Windows runtime signature cache",
+      "kind": "process",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "sdd/build-release.md",
+      "reason": "processo do repositório TS; ideias úteis só para build/CI"
+    },
+    {
+      "path": "implemented/process/2026-09-17-windows-signature-completion.md",
+      "title": "Separate Windows hardware signing from timestamp completion",
+      "kind": "process",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "sdd/build-release.md",
+      "reason": "processo do repositório TS; ideias úteis só para build/CI"
+    },
+    {
+      "path": "implemented/process/2026-09-19-no-unknown-casts.md",
+      "title": "Prohibit new assertions to unknown",
+      "kind": "process",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "sdd/build-release.md",
+      "reason": "processo do repositório TS; ideias úteis só para build/CI"
+    },
+    {
+      "path": "implemented/process/2026-09-28-dual-release-install-layout-work-budget.md",
+      "title": "Dual-release install layout work budget",
+      "kind": "process",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "sdd/build-release.md",
+      "reason": "processo do repositório TS; ideias úteis só para build/CI"
+    },
+    {
+      "path": "implemented/process/2026-10-05-pr-artifact-typechecks.md",
+      "title": "PR artifact builds and aggregate TypeScript checks",
+      "kind": "process",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "sdd/build-release.md",
+      "reason": "processo do repositório TS; ideias úteis só para build/CI"
+    },
+    {
+      "path": "implemented/process/2026-10-05-product-package-classification.md",
+      "title": "Require product use or an explicit package classification",
+      "kind": "process",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "sdd/build-release.md",
+      "reason": "processo do repositório TS; ideias úteis só para build/CI"
+    },
+    {
+      "path": "implemented/process/2026-10-08-session-reader-compatibility-review.md",
+      "title": "Session versions follow reader compatibility",
+      "kind": "process",
+      "status": "implemented",
+      "decision": "port",
+      "spec": "sdd/agent-loop-sessao.md",
+      "reason": "formato de sessão v4 / persistência"
+    },
+    {
+      "path": "implemented/process/2026-10-11-build-artifacts-check-split.md",
+      "title": "Split build:artifacts and build:check, with build running both concurrently",
+      "kind": "process",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "sdd/build-release.md",
+      "reason": "processo do repositório TS; ideias úteis só para build/CI"
+    },
+    {
+      "path": "implemented/process/2026-10-11-lossless-build-speedups.md",
+      "title": "Build speed-ups that keep outputs unchanged",
+      "kind": "process",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "sdd/build-release.md",
+      "reason": "processo do repositório TS; ideias úteis só para build/CI"
+    },
+    {
+      "path": "implemented/process/2026-10-12-local-gate-speedups.md",
+      "title": "Local gate, hook, and test speed-ups",
+      "kind": "process",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "sdd/build-release.md",
+      "reason": "processo do repositório TS; ideias úteis só para build/CI"
+    },
+    {
+      "path": "implemented/process/2026-10-14-experimental-dependency-policy.md",
+      "title": "Experimental packages follow the same dependency declaration rules",
+      "kind": "process",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "sdd/build-release.md",
+      "reason": "processo do repositório TS; ideias úteis só para build/CI"
+    },
+    {
+      "path": "implemented/process/2026-10-14-no-top-level-await-in-packages.md",
+      "title": "Package sources must not use top-level await",
+      "kind": "process",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "sdd/build-release.md",
+      "reason": "processo do repositório TS; ideias úteis só para build/CI"
+    },
+    {
+      "path": "implemented/simplification/2026-09-17-unified-subagent-activations.md",
+      "title": "Unified subagent activations",
+      "kind": "simplification",
+      "status": "implemented",
+      "decision": "adapt",
+      "spec": "sdd/subagentes-skills-hooks.md",
+      "reason": "presets e subagentes (mapear para .claude/agents)"
+    },
+    {
+      "path": "implemented/simplification/2026-09-19-remove-desktop-profile-core-cleanup.md",
+      "title": "Remove the Desktop production profile core-package cleanup",
+      "kind": "simplification",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/simplification/2026-09-26-team-direct-inbox.md",
+      "title": "Team messages use the target inbox",
+      "kind": "simplification",
+      "status": "implemented",
+      "decision": "adapt",
+      "spec": "sdd/browser-computer-agent-teams.md",
+      "reason": "times, worktree e computer use"
+    },
+    {
+      "path": "implemented/simplification/2026-10-05-native-or-ptc-presentation.md",
+      "title": "One tool invocation form per agent",
+      "kind": "simplification",
+      "status": "implemented",
+      "decision": "port",
+      "spec": "sdd/ferramentas-claude-code.md",
+      "reason": "pipeline e ferramentas"
+    },
+    {
+      "path": "implemented/simplification/2026-10-09-preset-owned-subagent-composition.md",
+      "title": "Preset-owned subagent composition",
+      "kind": "simplification",
+      "status": "implemented",
+      "decision": "adapt",
+      "spec": "sdd/subagentes-skills-hooks.md",
+      "reason": "presets e subagentes (mapear para .claude/agents)"
+    },
+    {
+      "path": "implemented/testing/2026-09-10-desktop-local-updater-qualification.md",
+      "title": "Qualify Desktop update downloads with an isolated local server",
+      "kind": "testing",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/testing/2026-09-14-desktop-installed-update-journal.md",
+      "title": "Preserve installed Desktop update evidence across restarts",
+      "kind": "testing",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/testing/2026-09-14-desktop-installed-update-materials.md",
+      "title": "Isolate installed-update materials from releases and user data",
+      "kind": "testing",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/testing/2026-09-27-observation-waits-on-observed-state.md",
+      "title": "Windows-lane observations wait on the state they read",
+      "kind": "testing",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "simplificação/teste interno do TS, sem efeito no contrato"
+    },
+    {
+      "path": "implemented/testing/2026-09-27-plugin-manager-git-child-environment.md",
+      "title": "Plugin-manager Git children isolate the host's command-line configuration",
+      "kind": "testing",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "simplificação/teste interno do TS, sem efeito no contrato"
+    },
+    {
+      "path": "implemented/testing/2026-09-27-spreadsheet-selection-by-keyboard-before-reflow.md",
+      "title": "Web lane moves spreadsheet selections by keyboard before reflow assertions",
+      "kind": "testing",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "implemented/testing/2026-09-28-session-corpus-performance.md",
+      "title": "Performance baselines for large Session corpora",
+      "kind": "testing",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "sdd/build-release.md",
+      "reason": "processo do repositório TS; ideias úteis só para build/CI"
+    },
+    {
+      "path": "implemented/testing/2026-10-07-memory-limited-benchmarks.md",
+      "title": "Memory-limited benchmark reruns",
+      "kind": "testing",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "sdd/build-release.md",
+      "reason": "processo do repositório TS; ideias úteis só para build/CI"
+    },
+    {
+      "path": "implemented/testing/2026-10-07-scaled-benchmark-report.md",
+      "title": "Scaled machine and memory-pressure benchmark report",
+      "kind": "testing",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "sdd/build-release.md",
+      "reason": "processo do repositório TS; ideias úteis só para build/CI"
+    },
+    {
+      "path": "implemented/testing/2026-10-11-user-text-credential-matching.md",
+      "title": "Linear credential matching and performance gates for user text",
+      "kind": "testing",
+      "status": "implemented",
+      "decision": "skip",
+      "spec": "sdd/build-release.md",
+      "reason": "processo do repositório TS; ideias úteis só para build/CI"
+    },
+    {
+      "path": "proposed/architecture/2026-09-20-unified-typert-remote-metadata.md",
+      "title": "Unified Typert/Remote metadata",
+      "kind": "architecture",
+      "status": "proposed",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "proposed/architecture/2026-09-29-session-migration-follow-redirect.md",
+      "title": "Present single-Session migration through follow redirection",
+      "kind": "architecture",
+      "status": "proposed",
+      "decision": "port",
+      "spec": "sdd/agent-loop-sessao.md",
+      "reason": "formato de sessão v4 / persistência"
+    },
+    {
+      "path": "proposed/architecture/2026-10-09-cordis-cleanup-dependency-lifetimes.md",
+      "title": "Keep cleanup dependencies usable until consumers finish",
+      "kind": "architecture",
+      "status": "proposed",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "perfis/cordis/HMR (substituídos por config TOML)"
+    },
+    {
+      "path": "proposed/feature/2026-09-08-desktop-mandatory-update-api.md",
+      "title": "Desktop mandatory-update API",
+      "kind": "feature",
+      "status": "proposed",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "proposed/feature/2026-09-08-desktop-update-extensions.md",
+      "title": "Deferred Desktop update extensions",
+      "kind": "feature",
+      "status": "proposed",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "proposed/feature/2026-09-08-desktop-update-policy-and-installation.md",
+      "title": "Desktop update policy and installation",
+      "kind": "feature",
+      "status": "proposed",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "proposed/feature/2026-10-03-pi-extensions-bridge.md",
+      "title": "Pi extensions bridge",
+      "kind": "feature",
+      "status": "proposed",
+      "decision": "adapt",
+      "spec": "sdd/plugins-marketplace.md",
+      "reason": "mercado de plugins do dsh (formato próprio) × formato Claude Code"
+    },
+    {
+      "path": "proposed/feature/2026-10-03-pi-plugins-compatibility.md",
+      "title": "Pi plugins compatibility — levels of support",
+      "kind": "feature",
+      "status": "proposed",
+      "decision": "adapt",
+      "spec": "sdd/plugins-marketplace.md",
+      "reason": "mercado de plugins do dsh (formato próprio) × formato Claude Code"
+    },
+    {
+      "path": "proposed/simplification/2026-09-17-defer-office-background-scheduling.md",
+      "title": "Defer Office background scheduling until a consumer needs it",
+      "kind": "simplification",
+      "status": "proposed",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "interface web/desktop, Office ou infraestrutura cordis/typert não portadas"
+    },
+    {
+      "path": "proposed/simplification/2026-09-19-config-only-hmr.md",
+      "title": "Limit DSH HMR to live profile configuration",
+      "kind": "simplification",
+      "status": "proposed",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "perfis/cordis/HMR (substituídos por config TOML)"
+    },
+    {
+      "path": "proposed/simplification/2026-09-19-provider-only-instruction-reads.md",
+      "title": "Read instruction files only through a filesystem provider",
+      "kind": "simplification",
+      "status": "proposed",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "simplificação/teste interno do TS, sem efeito no contrato"
+    },
+    {
+      "path": "proposed/simplification/2026-09-19-prune-stream-visibility-helpers.md",
+      "title": "Prune unused stream visibility helpers",
+      "kind": "simplification",
+      "status": "proposed",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "simplificação/teste interno do TS, sem efeito no contrato"
+    },
+    {
+      "path": "proposed/simplification/2026-09-19-python-sdk-directional-client.md",
+      "title": "Remove the Python SDK's unused reverse RPC direction",
+      "kind": "simplification",
+      "status": "proposed",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "simplificação/teste interno do TS, sem efeito no contrato"
+    },
+    {
+      "path": "proposed/simplification/2026-09-19-retire-app-bin-boot-helpers.md",
+      "title": "Retire app-boot helpers used only by fixtures",
+      "kind": "simplification",
+      "status": "proposed",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "simplificação/teste interno do TS, sem efeito no contrato"
+    },
+    {
+      "path": "proposed/simplification/2026-09-19-retire-prompt-registry-change-event.md",
+      "title": "Retire the prompt registry change event",
+      "kind": "simplification",
+      "status": "proposed",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "simplificação/teste interno do TS, sem efeito no contrato"
+    },
+    {
+      "path": "proposed/simplification/2026-09-19-shell-env-key-declarations.md",
+      "title": "Keep shell-environment declarations focused on key ownership",
+      "kind": "simplification",
+      "status": "proposed",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "simplificação/teste interno do TS, sem efeito no contrato"
+    },
+    {
+      "path": "proposed/simplification/2026-09-19-trim-session-query-convenience-api.md",
+      "title": "Trim unused SessionQuery convenience methods",
+      "kind": "simplification",
+      "status": "proposed",
+      "decision": "skip",
+      "spec": "—",
+      "reason": "simplificação/teste interno do TS, sem efeito no contrato"
+    }
+  ],
+  "baseline_after": "dsh-v0.2.1-rc.5",
+  "confirmed_at": "2026-11-01"
+}

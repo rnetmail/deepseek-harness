@@ -1,0 +1,2691 @@
+{
+  "generated_at": "2026-11-01T23:38:08.803Z",
+  "modules": [
+    {
+      "name": "llm",
+      "path": "packages/llm",
+      "purpose": "Contrato neutro de chamada de modelo (stream de chunks), registro de adapters/rotas, catálogo e descoberta de modelos, multi-provedor (pi-ai) com OAuth, DeepSeek direto, retry durável e medição de tokens",
+      "flowchart": "_reversa_sdd/flowcharts/llm.md",
+      "primary_files": [
+        "packages/llm/llm/src/index.ts",
+        "packages/llm/llm/src/types.ts",
+        "packages/llm/llm/src/message.ts",
+        "packages/llm/llm/src/assembler.ts",
+        "packages/llm/llm/src/content.ts",
+        "packages/llm/llm/src/error.ts",
+        "packages/llm/llm/src/retry-policy.ts",
+        "packages/llm/llm-pi-ai/src/config.ts",
+        "packages/llm/llm-pi-ai/src/provider.ts",
+        "packages/llm/llm-pi-ai/src/catalog.ts",
+        "packages/llm/llm-pi-ai/src/discovery.ts",
+        "packages/llm/llm-pi-ai/src/login.ts",
+        "packages/llm/llm-deepseek/src/config.ts",
+        "packages/llm/llm-retry/src/index.ts",
+        "packages/llm/token-meter/src/index.ts"
+      ],
+      "functions": [
+        {
+          "name": "LlmRuntime.stream",
+          "file": "packages/llm/llm/src/index.ts",
+          "params": [
+            "options: GenerateOptions"
+          ],
+          "returns": "AsyncIterable<StreamChunk>",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "LlmRuntime.registerAdapter",
+          "file": "packages/llm/llm/src/index.ts",
+          "params": [
+            "adapter: LlmAdapter"
+          ],
+          "returns": "AdapterRegistrationHandle",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "LlmRuntime.prepareCall",
+          "file": "packages/llm/llm/src/index.ts",
+          "params": [
+            "options"
+          ],
+          "returns": "PreparedLlmCall (one-shot)",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "LlmRuntime.resolveModelInfo",
+          "file": "packages/llm/llm/src/index.ts",
+          "params": [
+            "provider",
+            "model"
+          ],
+          "returns": "LlmResolvedModelInfo",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "LlmRuntime.discoverModels",
+          "file": "packages/llm/llm/src/index.ts",
+          "params": [
+            "req: LlmModelDiscoveryOperation"
+          ],
+          "returns": "LlmDiscoveredModel[]",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "projectFilesToText",
+          "file": "packages/llm/llm/src/content.ts",
+          "params": [
+            "messages",
+            "resolver"
+          ],
+          "returns": "Message[]",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "requiredImageOffload",
+          "file": "packages/llm/llm/src/content.ts",
+          "params": [
+            "messages",
+            "budget"
+          ],
+          "returns": "number",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "resolveRetryPolicy",
+          "file": "packages/llm/llm/src/retry-policy.ts",
+          "params": [
+            "config?: RetryPolicyConfig"
+          ],
+          "returns": "ResolvedRetryPolicy",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "supportedProtocols",
+          "file": "packages/llm/llm-pi-ai/src/provider.ts",
+          "params": [],
+          "returns": "openai-completions | openai-responses | anthropic-messages",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "tokenMeter.measure",
+          "file": "packages/llm/token-meter/src/index.ts",
+          "params": [
+            "session",
+            "requestHeader?"
+          ],
+          "returns": "{totalTokens, surfaceTokens, nodes[]}",
+          "confidence": "confirmed"
+        }
+      ],
+      "entities": [
+        {
+          "name": "GenerateOptions",
+          "fields": [
+            {
+              "name": "provider",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "model",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "reasoningEffort",
+              "type": "ReasoningEffortId",
+              "required": false
+            },
+            {
+              "name": "messages",
+              "type": "Message[]",
+              "required": true
+            },
+            {
+              "name": "system",
+              "type": "string",
+              "required": false
+            },
+            {
+              "name": "tools",
+              "type": "ToolSchema[]",
+              "required": false
+            },
+            {
+              "name": "temperature",
+              "type": "number",
+              "required": false
+            },
+            {
+              "name": "maxTokens",
+              "type": "number",
+              "required": false
+            },
+            {
+              "name": "stop",
+              "type": "string[]",
+              "required": false
+            },
+            {
+              "name": "signal",
+              "type": "AbortSignal",
+              "required": false
+            },
+            {
+              "name": "sessionId",
+              "type": "SessionId",
+              "required": false
+            },
+            {
+              "name": "purpose",
+              "type": "compaction | session-title",
+              "required": false
+            }
+          ],
+          "confidence": "confirmed"
+        },
+        {
+          "name": "StreamChunk",
+          "fields": [
+            {
+              "name": "type",
+              "type": "block-start|text-delta|reasoning-delta|tool-call-delta|block-end|usage|finish",
+              "required": true
+            }
+          ],
+          "confidence": "confirmed"
+        },
+        {
+          "name": "ContentBlock",
+          "fields": [
+            {
+              "name": "type",
+              "type": "text|reasoning|image|file|tool-call|tool-result",
+              "required": true
+            }
+          ],
+          "confidence": "confirmed"
+        },
+        {
+          "name": "TokenUsage",
+          "fields": [
+            {
+              "name": "inputTokens",
+              "type": "number",
+              "required": true
+            },
+            {
+              "name": "outputTokens",
+              "type": "number",
+              "required": true
+            },
+            {
+              "name": "totalTokens",
+              "type": "number",
+              "required": false
+            },
+            {
+              "name": "cacheReadTokens",
+              "type": "number",
+              "required": false
+            },
+            {
+              "name": "cacheWriteTokens",
+              "type": "number",
+              "required": false
+            },
+            {
+              "name": "reasoningTokens",
+              "type": "number",
+              "required": false
+            }
+          ],
+          "confidence": "confirmed"
+        },
+        {
+          "name": "LlmFailure",
+          "fields": [
+            {
+              "name": "message",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "code",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "status",
+              "type": "number",
+              "required": false
+            },
+            {
+              "name": "providerRetryAfterMs",
+              "type": "number",
+              "required": false
+            },
+            {
+              "name": "requestId",
+              "type": "ProviderRequestId",
+              "required": false
+            },
+            {
+              "name": "offloadImages",
+              "type": "number",
+              "required": false
+            }
+          ],
+          "confidence": "confirmed"
+        },
+        {
+          "name": "LlmResolvedModelInfo",
+          "fields": [
+            {
+              "name": "provider",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "id",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "inputModalities",
+              "type": "(text|image)[]",
+              "required": false
+            },
+            {
+              "name": "context.contextWindow",
+              "type": "number",
+              "required": false
+            },
+            {
+              "name": "defaultMaxTokens",
+              "type": "number",
+              "required": false
+            },
+            {
+              "name": "reasoning",
+              "type": "{efforts[], defaultEffort?}",
+              "required": false
+            },
+            {
+              "name": "systemPromptUpdate",
+              "type": "in-history",
+              "required": false
+            }
+          ],
+          "confidence": "confirmed"
+        },
+        {
+          "name": "PiAiProviderProfile",
+          "fields": [
+            {
+              "name": "apiKeyEnv",
+              "type": "string",
+              "required": false
+            },
+            {
+              "name": "displayName",
+              "type": "string",
+              "required": false
+            },
+            {
+              "name": "api",
+              "type": "openai-completions|openai-responses|anthropic-messages",
+              "required": false
+            },
+            {
+              "name": "baseURL",
+              "type": "string",
+              "required": false
+            },
+            {
+              "name": "models",
+              "type": "ModelProfile[]",
+              "required": false
+            },
+            {
+              "name": "modelOverrides",
+              "type": "dict<ModelOverride>",
+              "required": false
+            },
+            {
+              "name": "compat",
+              "type": "CompatProfile",
+              "required": false
+            },
+            {
+              "name": "headers",
+              "type": "dict<string>",
+              "required": false
+            },
+            {
+              "name": "defaultContextWindow",
+              "type": "int (262144)",
+              "required": false
+            },
+            {
+              "name": "defaultMaxTokens",
+              "type": "int (32768)",
+              "required": false
+            },
+            {
+              "name": "cacheRetention",
+              "type": "none|short|long",
+              "required": false
+            },
+            {
+              "name": "transport",
+              "type": "sse|websocket|websocket-cached|auto",
+              "required": false
+            },
+            {
+              "name": "retryPolicy",
+              "type": "RetryPolicyConfig",
+              "required": false
+            }
+          ],
+          "confidence": "confirmed"
+        },
+        {
+          "name": "RetryPolicyConfig",
+          "fields": [
+            {
+              "name": "mode",
+              "type": "normal|always",
+              "required": true
+            },
+            {
+              "name": "maxRetries",
+              "type": "number (5)",
+              "required": false
+            },
+            {
+              "name": "codes",
+              "type": "string[]",
+              "required": false
+            },
+            {
+              "name": "backoff.initialDelayMs",
+              "type": "number (500)",
+              "required": false
+            },
+            {
+              "name": "backoff.maxDelayMs",
+              "type": "number (10000)",
+              "required": false
+            },
+            {
+              "name": "backoff.jitterRatio",
+              "type": "number (0.1)",
+              "required": false
+            }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        {
+          "description": "Todo stream termina em exatamente um chunk finish; usage precede finish",
+          "location": "packages/llm/llm/README.md#invariants",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Tudo que é visível ao modelo é reconstruível do log de sessão; requests são deep-frozen",
+          "location": "packages/llm/llm/README.md#invariants",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Replay state só é enviado se o mesmo adapter for dono das rotas histórica e destino",
+          "location": "packages/llm/llm/README.md#invariants",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "FileBlock nunca chega ao provedor; vira linha de handle com caminho read-only",
+          "location": "packages/llm/llm/src/content.ts",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Rota pi-ai fora do catálogo exige api, baseURL e models não vazio",
+          "location": "packages/llm/llm-pi-ai/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Retry normal: 5 tentativas para EMPTY_RESPONSE/RATE_LIMIT/SERVER/TIMEOUT/TRANSPORT, backoff 500ms-10s, jitter 10%",
+          "location": "packages/llm/llm-retry/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Estimativa heurística de tokens = ceil(chars/4) + overhead por bloco",
+          "location": "packages/llm/token-meter/src/estimate.ts:13",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Harness pi-ai só despacha 3 protocolos de wire, embora o catálogo descreva 9",
+          "location": "packages/llm/llm-pi-ai/src/provider.ts:47",
+          "confidence": "confirmed"
+        }
+      ],
+      "algorithms": [
+        "Montagem incremental chunk→bloco (BlockAssembler)",
+        "Acumulação compacta de stream com timestamps por token",
+        "Backoff exponencial com jitter e Retry-After",
+        "Seleção de offload das imagens mais antigas por orçamento de bytes/contagem com quantum",
+        "Ancoragem de medição de tokens no usage real do provedor + deltas assinados",
+        "Merge de perfis base ⊕ usuário por provedor com validação atômica"
+      ],
+      "dependencies": [
+        "typert",
+        "credentials",
+        "settings",
+        "attachment",
+        "fs",
+        "session",
+        "core",
+        "compaction"
+      ],
+      "external": {
+        "catalog_providers": 39,
+        "free_models": 113,
+        "oauth_subscriptions": [
+          "anthropic (Claude Pro/Max)",
+          "openai-codex (ChatGPT Plus/Pro)",
+          "github-copilot",
+          "xai (SuperGrok/X Premium)",
+          "kimi-coding",
+          "openrouter"
+        ]
+      },
+      "complexity": "high"
+    },
+    {
+      "name": "core",
+      "path": "packages/core",
+      "purpose": "Agente (registro, inbox, handle), loop ReAct turno/passo, registro e pipeline de ferramentas, sessão event-sourced, montagem do system prompt e escopo por agente",
+      "flowchart": "_reversa_sdd/flowcharts/core.md",
+      "primary_files": [
+        "packages/core/agent/src/index.ts",
+        "packages/core/agent/src/runtime-types.ts",
+        "packages/core/agent-loop/src/agent.ts",
+        "packages/core/agent-loop/src/inbox.ts",
+        "packages/core/agent-loop/src/tool-calls.ts",
+        "packages/core/tools/src/index.ts",
+        "packages/core/tools/src/schema.ts",
+        "packages/core/tools/src/ptc.ts",
+        "packages/core/session/src/index.ts",
+        "packages/core/session/src/types.ts",
+        "packages/core/session/src/surface.ts",
+        "packages/core/session/src/request-header.ts",
+        "packages/core/session/src/repair.ts",
+        "packages/core/system-prompt/src/index.ts",
+        "packages/core/scope/src/index.ts"
+      ],
+      "functions": [
+        {
+          "name": "ctx.agents.create",
+          "file": "packages/core/agent/src/index.ts",
+          "params": [
+            "CreateAgentOptions"
+          ],
+          "returns": "Promise<AgentHandle>",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "ctx.agents.resume",
+          "file": "packages/core/agent/src/index.ts",
+          "params": [
+            "ResumeAgentOptions"
+          ],
+          "returns": "Promise<AgentHandle>",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "Agent.followup / steer / inject / cancel / whenIdle",
+          "file": "packages/core/agent/src/runtime-types.ts",
+          "params": [
+            "UserMessage input"
+          ],
+          "returns": "void | Promise",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "ReactLoopAgent (turn/step machine)",
+          "file": "packages/core/agent-loop/src/agent.ts",
+          "params": [],
+          "returns": "",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "defineTool",
+          "file": "packages/core/tools/src/schema.ts",
+          "params": [
+            "ToolDefinition spec"
+          ],
+          "returns": "ToolDefinition",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "ctx.tools.register / restrict / guard / schemas",
+          "file": "packages/core/tools/src/index.ts",
+          "params": [],
+          "returns": "",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "session.append",
+          "file": "packages/core/session/src/index.ts",
+          "params": [
+            "type",
+            "data",
+            "opts{surfaceOp}"
+          ],
+          "returns": "SessionSeq",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "session.deriveMessages",
+          "file": "packages/core/session/src/surface.ts",
+          "params": [],
+          "returns": "Message[]",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "ctx.sessions.fork",
+          "file": "packages/core/session/src/index.ts",
+          "params": [
+            "source",
+            "boundary?",
+            "childSessionId?"
+          ],
+          "returns": "Session",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "foldRequestHeader",
+          "file": "packages/core/session/src/request-header.ts",
+          "params": [
+            "events"
+          ],
+          "returns": "RequestHeader",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "ctx.systemPrompt.assemble / renderPrompt / section / variable",
+          "file": "packages/core/system-prompt/src/index.ts",
+          "params": [],
+          "returns": "",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "createScope",
+          "file": "packages/core/scope/src/index.ts",
+          "params": [
+            "ctx",
+            "key"
+          ],
+          "returns": "Scope",
+          "confidence": "confirmed"
+        }
+      ],
+      "entities": [
+        {
+          "name": "AgentOptions",
+          "fields": [
+            {
+              "name": "provider",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "model",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "reasoningEffort",
+              "type": "string",
+              "required": false
+            },
+            {
+              "name": "maxTokens",
+              "type": "number",
+              "required": false
+            }
+          ],
+          "confidence": "confirmed"
+        },
+        {
+          "name": "SessionHeader",
+          "fields": [
+            {
+              "name": "version",
+              "type": "number",
+              "required": true
+            },
+            {
+              "name": "id",
+              "type": "SessionId",
+              "required": true
+            },
+            {
+              "name": "createdAt",
+              "type": "number",
+              "required": true
+            },
+            {
+              "name": "cwd",
+              "type": "string",
+              "required": false
+            },
+            {
+              "name": "parentSession",
+              "type": "SessionId",
+              "required": false
+            },
+            {
+              "name": "isSeeded",
+              "type": "boolean",
+              "required": true
+            },
+            {
+              "name": "origin",
+              "type": "subagent",
+              "required": false
+            }
+          ],
+          "confidence": "confirmed"
+        },
+        {
+          "name": "SessionEvent",
+          "fields": [
+            {
+              "name": "type",
+              "type": "turn/start|turn/end|step/start|step/end|user/message|system/message|assistant/message|assistant/attempt|tool/call|tool/result|request/header|request/context|session/end-seed|+plugin events",
+              "required": true
+            },
+            {
+              "name": "surfaceOp",
+              "type": "append | replace{startSeq,endSeq}",
+              "required": false
+            }
+          ],
+          "confidence": "confirmed"
+        },
+        {
+          "name": "ToolDefinition",
+          "fields": [
+            {
+              "name": "name",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "description",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "parameters",
+              "type": "schema DSL | JsonSchemaNode",
+              "required": true
+            },
+            {
+              "name": "output",
+              "type": "{schema, render}",
+              "required": true
+            },
+            {
+              "name": "execute",
+              "type": "(args, exec) => Promise",
+              "required": true
+            },
+            {
+              "name": "timeoutMs",
+              "type": "number",
+              "required": false
+            }
+          ],
+          "confidence": "confirmed"
+        },
+        {
+          "name": "SystemPromptSection",
+          "fields": [
+            {
+              "name": "name",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "order",
+              "type": "number",
+              "required": true
+            },
+            {
+              "name": "text",
+              "type": "string|fn",
+              "required": true
+            },
+            {
+              "name": "interpolate",
+              "type": "boolean",
+              "required": false
+            },
+            {
+              "name": "complete",
+              "type": "boolean",
+              "required": false
+            }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        {
+          "description": "Somente o detentor do AgentHandle pode destruir o agente",
+          "location": "packages/core/agent/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Turno reivindica nextStep + exatamente um prompt de nextTurn; entre passos só nextStep",
+          "location": "packages/core/agent-loop/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Até 10 tool calls parallel-safe simultâneas; exclusivas são barreiras",
+          "location": "packages/core/agent-loop/src/constants.ts:6",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Falha de plugin/ferramenta encerra o turno, não o loop",
+          "location": "packages/core/agent-loop/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Tool calls não despachadas após cancelamento recebem ABORTED_BEFORE_DISPATCH sintético",
+          "location": "packages/core/agent-loop/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Negação de guard é monotônica: nenhum listener posterior a reverte",
+          "location": "packages/core/tools/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Fork só em prefixo fora de turno aberto",
+          "location": "packages/core/session/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "tool/result com data.error exige content[0].isError === true",
+          "location": "packages/core/session/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Variável de prompt desconhecida ou sem valor faz a montagem falhar",
+          "location": "packages/core/system-prompt/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Em série in-history, prompt alterado é anexado (preserva cache); senão consolidado no nó 0",
+          "location": "packages/core/agent-loop/README.md",
+          "confidence": "confirmed"
+        }
+      ],
+      "algorithms": [
+        "Máquina de turno/passo ReAct com inbox de duas filas e splices duráveis",
+        "Pool limitado de tool calls com barreiras exclusivas",
+        "Projeção incremental de superfície com replace por intervalo e gerações",
+        "Snapshot canônico de request header por série (reconstrução exata)",
+        "Ordenação de seções por (order, nome) + interpolação estrita",
+        "Cadeia de escopos: herança de registros para baixo, admissão de eventos para cima"
+      ],
+      "dependencies": [
+        "llm",
+        "session",
+        "settings",
+        "typert",
+        "vendor/cordis"
+      ],
+      "complexity": "very-high"
+    },
+    {
+      "name": "session",
+      "path": "packages/session",
+      "purpose": "Formato versionado do log de sessão (v3) e migrações, persistência JSONL single-writer com recuperação de crash, barreiras de checkpoint, projeções de estado para clientes (título, stats, outline), telemetria OTel e envio do log à DeepSeek",
+      "flowchart": "_reversa_sdd/flowcharts/session.md",
+      "primary_files": [
+        "packages/session/session-format/src/index.ts",
+        "packages/session/session-format-catalog/src/index.ts",
+        "packages/session/session-persistence/src/index.ts",
+        "packages/session/session-persistence-jsonl/src/index.ts",
+        "packages/session/session-checkpoint-policy/src/index.ts",
+        "packages/session/session-projection/src/index.ts",
+        "packages/session/session-title/src/index.ts",
+        "packages/session/session-log-deepseek/src/index.ts",
+        "packages/core/session/src/types.ts"
+      ],
+      "functions": [
+        {
+          "name": "createSessionFormatCatalog",
+          "file": "packages/session/session-format/src/index.ts",
+          "params": [
+            "{currentVersion, codecs, currentEncoder, migrations, restoreCurrent, ...}"
+          ],
+          "returns": "SessionFormatCatalog",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "catalog.readHeader",
+          "file": "packages/session/session-format/src/index.ts",
+          "params": [
+            "physicalHeader"
+          ],
+          "returns": "current|migration-required|unsupported|malformed",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "ctx.sessionPersistence.create/open/stat/list/flush",
+          "file": "packages/session/session-persistence/src/index.ts",
+          "params": [],
+          "returns": "SessionHandle | snapshot",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "ctx.sessionProjections.register/snapshot/onChanged/stateOf",
+          "file": "packages/session/session-projection/src/index.ts",
+          "params": [],
+          "returns": "",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "foldSessionTitle",
+          "file": "packages/session/session-title/src/index.ts",
+          "params": [
+            "events"
+          ],
+          "returns": "string",
+          "confidence": "confirmed"
+        }
+      ],
+      "entities": [
+        {
+          "name": "SessionFile(v3)",
+          "fields": [
+            {
+              "name": "header",
+              "type": "SessionHeader (linha 1)",
+              "required": true
+            },
+            {
+              "name": "events",
+              "type": "SessionEvent por linha",
+              "required": true
+            }
+          ],
+          "confidence": "confirmed"
+        },
+        {
+          "name": "ProjectionDefinition",
+          "fields": [
+            {
+              "name": "key",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "stateVersion",
+              "type": "int",
+              "required": true
+            },
+            {
+              "name": "init",
+              "type": "fn",
+              "required": true
+            },
+            {
+              "name": "apply",
+              "type": "fn",
+              "required": true
+            },
+            {
+              "name": "wire",
+              "type": "{viewSchema, view}",
+              "required": false
+            }
+          ],
+          "confidence": "confirmed"
+        },
+        {
+          "name": "SessionStats",
+          "fields": [
+            {
+              "name": "turns",
+              "type": "int",
+              "required": true
+            },
+            {
+              "name": "steps",
+              "type": "int",
+              "required": true
+            },
+            {
+              "name": "llmMs",
+              "type": "int",
+              "required": true
+            },
+            {
+              "name": "toolMs",
+              "type": "int",
+              "required": true
+            },
+            {
+              "name": "ttftMs",
+              "type": "int",
+              "required": true
+            },
+            {
+              "name": "decodeMs",
+              "type": "int",
+              "required": true
+            },
+            {
+              "name": "decodeTokens",
+              "type": "int",
+              "required": true
+            }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        {
+          "description": "SESSION_FORMAT_VERSION = 3; formato mais novo que o build é recusado",
+          "location": "packages/core/session/src/types.ts:88",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Um único writer por sessão por processo",
+          "location": "packages/session/session-persistence/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Linha corrompida descartada com sufixo, exceto se houver turn/end posterior (fatal)",
+          "location": "packages/session/session-format/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Checkpoint fail-closed antes do stream, antes de cada tool call de topo e em cada pre-step",
+          "location": "packages/session/session-checkpoint-policy/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Título definido pelo usuário fixa a sessão até refresh()",
+          "location": "packages/session/session-title/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "session-log-deepseek ativo por padrão envia sufixo do log de eventos no campo dsh_session_log de requests à DeepSeek oficial",
+          "location": "packages/session/session-log-deepseek/README.md; packages/bundle/base/cordis.patch.yml:36",
+          "confidence": "confirmed"
+        }
+      ],
+      "algorithms": [
+        "Restauração em streaming com migração encadeada entre versões adjacentes",
+        "Recuperação de cauda rasgada com regra de fatalidade por turn/end posterior",
+        "Batching de escrita com barreiras de flush e pausa em falha",
+        "Fold de projeções síncronas com supressão de publicação por identidade",
+        "Watermark at-least-once de entrega (throughSeq)"
+      ],
+      "dependencies": [
+        "core",
+        "llm",
+        "settings",
+        "util"
+      ],
+      "complexity": "high"
+    },
+    {
+      "name": "context",
+      "path": "packages/context",
+      "purpose": "Instruções do projeto (AGENTS.md/CLAUDE.md em cadeia), menções @arquivo e @sessão, contexto de hora e tmux injetados como mensagens user-role",
+      "flowchart": "_reversa_sdd/flowcharts/compaction.md",
+      "primary_files": [
+        "packages/context/agent-instructions/src/index.ts",
+        "packages/context/file-reference/src/index.ts",
+        "packages/context/session-reference/src/index.ts",
+        "packages/context/time-context/src/index.ts",
+        "packages/context/tmux-context/src/index.ts"
+      ],
+      "functions": [
+        {
+          "name": "ctx.fileReferences.list",
+          "file": "packages/context/file-reference/src/index.ts",
+          "params": [
+            "agent",
+            "query",
+            "signal"
+          ],
+          "returns": "Candidate[]",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "sessionReferences.listCandidates",
+          "file": "packages/context/session-reference/src/index.ts",
+          "params": [
+            "agent",
+            "query?",
+            "limit?"
+          ],
+          "returns": "Candidate[]",
+          "confidence": "confirmed"
+        }
+      ],
+      "entities": [
+        {
+          "name": "AgentInstructionsConfig",
+          "fields": [
+            {
+              "name": "maxBytes",
+              "type": "int",
+              "required": true
+            },
+            {
+              "name": "maxSourceBytes",
+              "type": "int",
+              "required": false
+            },
+            {
+              "name": "projectRootMarkers",
+              "type": "string[]",
+              "required": false
+            },
+            {
+              "name": "instructionFileCandidates",
+              "type": "string[]",
+              "required": false
+            },
+            {
+              "name": "localInstructionFileCandidates",
+              "type": "string[]",
+              "required": false
+            }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        {
+          "description": "Carrega $DSH_HOME/AGENTS.md + cadeia raiz→cwd de AGENTS.md, CLAUDE.md, AGENTS.local.md, CLAUDE.local.md; dedup de irmãos idênticos",
+          "location": "packages/context/agent-instructions/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Arquivo de instruções em diretório mais profundo é incluído após read/write/edit bem-sucedido ali",
+          "location": "packages/context/agent-instructions/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Snapshot de sessão referenciada é background não confiável; no máximo 3 por mensagem",
+          "location": "packages/context/session-reference/README.md",
+          "confidence": "confirmed"
+        }
+      ],
+      "algorithms": [
+        "Descoberta de raiz por marcador com falha explícita em erro de I/O",
+        "Orçamento por fonte = max(64KiB, contextWindow*4*fração)"
+      ],
+      "dependencies": [
+        "fs",
+        "core",
+        "session-query",
+        "spill",
+        "llm"
+      ],
+      "complexity": "medium"
+    },
+    {
+      "name": "compaction",
+      "path": "packages/compaction",
+      "purpose": "Condensação automática/manual/por overflow do histórico via resumo LLM estruturado, poda de tool results grandes e offload de imagens",
+      "flowchart": "_reversa_sdd/flowcharts/compaction.md",
+      "primary_files": [
+        "packages/compaction/compaction/src/index.ts",
+        "packages/compaction/compaction-basic/src/index.ts",
+        "packages/compaction/compaction-basic/src/region.ts",
+        "packages/compaction/compaction-basic/src/summarizer.ts",
+        "packages/compaction/compaction-tool-result-pruner/src/index.ts",
+        "packages/compaction/compaction-image-offload/src/index.ts",
+        "packages/compaction/command-compact/src/index.ts"
+      ],
+      "functions": [
+        {
+          "name": "compactRegion",
+          "file": "packages/compaction/compaction-basic/src/region.ts",
+          "params": [
+            "session",
+            "start",
+            "end"
+          ],
+          "returns": "CompactionResult",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "frameSummary",
+          "file": "packages/compaction/compaction-basic/src/summarizer.ts:186",
+          "params": [
+            "summary: ContentBlock[]"
+          ],
+          "returns": "ContentBlock[]",
+          "confidence": "confirmed"
+        }
+      ],
+      "entities": [
+        {
+          "name": "CompactionBasicConfig",
+          "fields": [
+            {
+              "name": "thresholdRatio",
+              "type": "number(0.8)",
+              "required": false
+            },
+            {
+              "name": "retainRatio",
+              "type": "number(0.16)",
+              "required": false
+            },
+            {
+              "name": "retainTokens",
+              "type": "int",
+              "required": false
+            },
+            {
+              "name": "summarizationProvider",
+              "type": "string",
+              "required": false
+            },
+            {
+              "name": "summarizationModel",
+              "type": "string",
+              "required": false
+            },
+            {
+              "name": "maxTokens",
+              "type": "int(8192)",
+              "required": false
+            },
+            {
+              "name": "compactionRetries",
+              "type": "int(1)",
+              "required": false
+            },
+            {
+              "name": "maxOverflowRetries",
+              "type": "int(1)",
+              "required": false
+            },
+            {
+              "name": "modelPolicies",
+              "type": "array",
+              "required": false
+            },
+            {
+              "name": "auto",
+              "type": "boolean(true)",
+              "required": false
+            }
+          ],
+          "confidence": "confirmed"
+        },
+        {
+          "name": "PrunerConfig",
+          "fields": [
+            {
+              "name": "thresholdChars",
+              "type": "int(8192)",
+              "required": false
+            },
+            {
+              "name": "headChars",
+              "type": "int(4096)",
+              "required": false
+            },
+            {
+              "name": "tailChars",
+              "type": "int(1024)",
+              "required": false
+            }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        {
+          "description": "Compacta ao atingir 80% da janela, mantendo 16% recentes verbatim",
+          "location": "packages/compaction/compaction-basic/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Fronteiras de compactação nunca separam par tool-call/tool-result",
+          "location": "packages/compaction/compaction-basic/src/region.ts:146,350",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Resumo segue 8 seções fixas e consolida checkpoint anterior",
+          "location": "packages/compaction/compaction-basic/src/summarizer.ts:31",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Resumo truncado ou com imagem falha fechado",
+          "location": "packages/compaction/compaction-basic/src/summarizer.ts:195-216",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Poda dispensa sumarização se o histórico couber no limiar",
+          "location": "packages/compaction/compaction-basic/README.md",
+          "confidence": "confirmed"
+        }
+      ],
+      "algorithms": [
+        "Seleção de span balanceado mais antigo com cauda retida",
+        "Sumarização como prefixo do último request (reuso de KV cache)",
+        "Poda head/tail por code points",
+        "Verificação de estabilidade antes do commit (otimista)"
+      ],
+      "dependencies": [
+        "llm",
+        "core",
+        "session",
+        "token-meter"
+      ],
+      "complexity": "high"
+    },
+    {
+      "name": "skill",
+      "path": "packages/skill",
+      "purpose": "Registro de skills multi-provedor, provedor filesystem (SKILL.md com frontmatter) e ferramenta skill + catálogo",
+      "flowchart": "_reversa_sdd/flowcharts/extensibility.md",
+      "primary_files": [
+        "packages/skill/skill/src/index.ts",
+        "packages/skill/skill-filesystem/src/index.ts",
+        "packages/skill/tool-skill/src/index.ts"
+      ],
+      "business_rules": [
+        {
+          "description": "Raízes padrão: .dsh/skills, .agents/skills, custom, ~/.dsh/skills, ~/.agents/skills, bundled — .claude/skills ausente",
+          "location": "packages/skill/skill-filesystem/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "SKILL.md aninhado não é descoberto",
+          "location": "packages/skill/skill-filesystem/README.md",
+          "confidence": "confirmed"
+        }
+      ],
+      "dependencies": [
+        "core",
+        "fs"
+      ],
+      "complexity": "low"
+    },
+    {
+      "name": "subagent",
+      "path": "packages/subagent",
+      "purpose": "Delegação a subagentes one-shot/contínuos com provedores in-process, ACP, Claude Code (Agent SDK), Codex",
+      "flowchart": "_reversa_sdd/flowcharts/extensibility.md",
+      "primary_files": [
+        "packages/subagent/subagent/src/index.ts",
+        "packages/subagent/tool-subagent/src/index.ts",
+        "packages/subagent/tool-subagent-control/src/index.ts",
+        "packages/subagent/subagent-claude-code/src/index.ts"
+      ],
+      "business_rules": [
+        {
+          "description": "maxDepth padrão 3; capacidade não suportada falha no início",
+          "location": "packages/subagent/tool-subagent/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Provider claude-code remove env de credenciais e usa permissionMode dontAsk por padrão",
+          "location": "packages/subagent/subagent-claude-code/README.md",
+          "confidence": "confirmed"
+        }
+      ],
+      "dependencies": [
+        "core",
+        "session",
+        "jobs",
+        "acp"
+      ],
+      "complexity": "high"
+    },
+    {
+      "name": "hooks",
+      "path": "packages/hooks",
+      "purpose": "Bridge de hooks command do Claude Code/Codex para os pontos de extensão do loop",
+      "flowchart": "_reversa_sdd/flowcharts/extensibility.md",
+      "primary_files": [
+        "packages/hooks/hook-protocol/src/index.ts",
+        "packages/hooks/hooks-claude-code/src/index.ts",
+        "packages/hooks/hooks-claude-code/src/config.ts"
+      ],
+      "business_rules": [
+        {
+          "description": "Exit 2 bloqueia; outros códigos são falha não bloqueante",
+          "location": "packages/hooks/hook-protocol/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Só hooks type=command; updatedInput e continue:false sem efeito",
+          "location": "packages/hooks/hook-protocol/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Eventos suportados: SessionStart, UserPromptSubmit, PreToolUse, PostToolUse, Stop, SubagentStart, SubagentStop",
+          "location": "packages/hooks/hooks-claude-code/README.md",
+          "confidence": "confirmed"
+        }
+      ],
+      "dependencies": [
+        "core",
+        "shell"
+      ],
+      "complexity": "medium"
+    },
+    {
+      "name": "mcp",
+      "path": "packages/mcp",
+      "purpose": "Cliente MCP stdio/streamable-http com reconexão; ferramentas mcp__server__tool e ferramentas de recursos",
+      "flowchart": "_reversa_sdd/flowcharts/extensibility.md",
+      "primary_files": [
+        "packages/mcp/mcp-client/src/index.ts",
+        "packages/mcp/mcp-resources/src/index.ts"
+      ],
+      "business_rules": [
+        {
+          "description": "Ferramentas nomeadas mcp__<serverName>__<tool>",
+          "location": "packages/mcp/mcp-client/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Não lê .mcp.json; config por linha YAML cordis",
+          "location": "packages/mcp (busca sem ocorrências fora de acp)",
+          "confidence": "inferred"
+        }
+      ],
+      "dependencies": [
+        "core",
+        "system-prompt"
+      ],
+      "complexity": "medium"
+    },
+    {
+      "name": "sandbox+guard",
+      "path": "packages/sandbox; packages/guard; native/system",
+      "purpose": "Confinamento de subprocessos (read-only/workspace-write/danger-full-access) com backends por plataforma, escalonamento por chamada e guardas de timeout/repetição",
+      "flowchart": "_reversa_sdd/flowcharts/execution.md",
+      "primary_files": [
+        "packages/sandbox/sandbox/src/index.ts",
+        "packages/sandbox/sandbox-policy/src/index.ts",
+        "packages/sandbox/sandbox-local/src/index.ts",
+        "packages/sandbox/sandbox-windows-acl/src/index.ts",
+        "packages/guard/timeout-policy/src/index.ts",
+        "packages/guard/repeat-tool-reminder/src/index.ts"
+      ],
+      "business_rules": [
+        {
+          "description": "Modo padrão fail-safe read-only; sem backend → SANDBOX_UNAVAILABLE",
+          "location": "packages/sandbox/sandbox-policy/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Escalonamento: repetir a mesma chamada uma vez com sandbox_permissions + justification, aprovação vale só para essa chamada",
+          "location": "packages/sandbox/sandbox/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Windows ACL confina só escrita (enforcement partial)",
+          "location": "packages/sandbox/sandbox-windows-acl/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Lembrete de repetição em 3,5,8 chamadas idênticas consecutivas",
+          "location": "packages/guard/repeat-tool-reminder/README.md",
+          "confidence": "confirmed"
+        }
+      ],
+      "dependencies": [
+        "shell",
+        "fs",
+        "interaction"
+      ],
+      "complexity": "high"
+    },
+    {
+      "name": "interaction",
+      "path": "packages/interaction",
+      "purpose": "Aprovação de ações (ask/never) com answerers, presets de permissão, comandos slash e ferramenta ask_user_question",
+      "flowchart": "_reversa_sdd/flowcharts/execution.md",
+      "primary_files": [
+        "packages/interaction/user-approval/src/index.ts",
+        "packages/interaction/permission-presets/src/index.ts",
+        "packages/interaction/commands/src/index.ts",
+        "packages/interaction/tool-ask-user/src/index.ts"
+      ],
+      "business_rules": [
+        {
+          "description": "Sem answerer terminal a aprovação resolve unavailable e falha fechado",
+          "location": "packages/interaction/user-approval/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Comando desconhecido é rejeitado e não vira prompt",
+          "location": "packages/interaction/commands/README.md",
+          "confidence": "confirmed"
+        }
+      ],
+      "dependencies": [
+        "core",
+        "sandbox"
+      ],
+      "complexity": "medium"
+    },
+    {
+      "name": "shell+subprocess",
+      "path": "packages/shell; packages/subprocess; packages/terminal",
+      "purpose": "Execução de bash/pwsh one-shot e persistente, jobs em background, PTY interativo, spill de saída e resolução segura de executáveis",
+      "flowchart": "_reversa_sdd/flowcharts/execution.md",
+      "primary_files": [
+        "packages/shell/shell/src/index.ts",
+        "packages/shell/tool-bash/src/index.ts",
+        "packages/shell/tool-bash-persistent/src/index.ts",
+        "packages/shell/tool-pwsh/src/index.ts",
+        "packages/subprocess/subprocess-local/src/index.ts"
+      ],
+      "business_rules": [
+        {
+          "description": "exit≠0, timeout e abort são resultados, não exceções",
+          "location": "packages/shell/shell/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "bash one-shot não preserva estado; persistente mantém cd/env por agente com timeout 300s",
+          "location": "packages/shell/tool-bash*/README.md",
+          "confidence": "confirmed"
+        }
+      ],
+      "dependencies": [
+        "sandbox",
+        "spill",
+        "jobs",
+        "terminal"
+      ],
+      "complexity": "high"
+    },
+    {
+      "name": "fs",
+      "path": "packages/fs",
+      "purpose": "Ferramentas read/read_image/write/edit/glob/grep/str_replace_editor/present sobre ctx.fs, com política read-before-write",
+      "flowchart": "_reversa_sdd/flowcharts/execution.md",
+      "primary_files": [
+        "packages/fs/fs/src/index.ts",
+        "packages/fs/tool-fs/src/index.ts",
+        "packages/fs/tool-fs-search/src/index.ts",
+        "packages/fs/fs-observation-policy/src/index.ts",
+        "packages/fs/tool-str-replace-editor/src/index.ts"
+      ],
+      "business_rules": [
+        {
+          "description": "Sobrescrever/editar exige leitura prévia da mesma versão (FS_NOT_OBSERVED/FS_STALE_VERSION)",
+          "location": "packages/fs/fs-observation-policy/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Nomes de ferramentas minúsculos (read, edit, bash) divergem do Claude Code (Read, Edit, Bash); argumentos idênticos",
+          "location": "packages/fs/tool-fs/src/index.ts",
+          "confidence": "confirmed"
+        }
+      ],
+      "dependencies": [
+        "subprocess",
+        "attachment",
+        "spill",
+        "sandbox"
+      ],
+      "complexity": "medium"
+    },
+    {
+      "name": "plan+todo",
+      "path": "packages/plan; packages/todo",
+      "purpose": "Plan mode consultivo (/plan, exit_plan_mode) e lista de tarefas todo_write de substituição total",
+      "primary_files": [
+        "packages/plan/plan-mode/src/index.ts",
+        "packages/todo/tool-todo/src/index.ts"
+      ],
+      "business_rules": [
+        {
+          "description": "Plan mode não restringe ferramentas (diferente do Claude Code)",
+          "location": "packages/plan/plan-mode/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "todo_write substitui a lista inteira; descrições não vazias e únicas",
+          "location": "packages/todo/tool-todo/README.md",
+          "confidence": "confirmed"
+        }
+      ],
+      "dependencies": [
+        "core",
+        "interaction"
+      ],
+      "complexity": "low"
+    },
+    {
+      "name": "workflow+goal",
+      "path": "packages/workflow; packages/goal",
+      "purpose": "Goal de longo prazo com rodadas autônomas, workflow JS multi-agente (agent/parallel/pipeline/phase) e loop Ralph",
+      "primary_files": [
+        "packages/goal/goal/src/index.ts",
+        "packages/goal/goal-round-driver/src/index.ts",
+        "packages/workflow/workflow/src/index.ts",
+        "packages/workflow/workflow-ptc/src/index.ts",
+        "packages/workflow/tool-workflow/src/index.ts",
+        "packages/workflow/tool-ralph/src/index.ts"
+      ],
+      "business_rules": [
+        {
+          "description": "Um goal atual por sessão; após resume/fork fica desarmado",
+          "location": "packages/goal/*/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Workflow: até 1000 agentes por run; falha de filho resolve null",
+          "location": "packages/workflow/workflow-ptc/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Ralph desabilitado por padrão; filho novo por rodada sem contexto do pai",
+          "location": "packages/workflow/tool-ralph/README.md",
+          "confidence": "confirmed"
+        }
+      ],
+      "dependencies": [
+        "subagent",
+        "ptc-runtime",
+        "core",
+        "session"
+      ],
+      "complexity": "high"
+    },
+    {
+      "name": "settings+credentials",
+      "path": "packages/settings; packages/credentials",
+      "purpose": "Settings por namespace com camadas base/usuário e hot-reload em ~/.dsh/settings.yaml; store de credenciais local e fluxos de autorização OAuth",
+      "primary_files": [
+        "packages/settings/settings/src/index.ts",
+        "packages/settings/settings-file/src/index.ts",
+        "packages/credentials/credentials/src/index.ts",
+        "packages/credentials/credentials-local/src/index.ts",
+        "packages/credentials/authorization/src/index.ts"
+      ],
+      "business_rules": [
+        {
+          "description": "Documento de settings inválido no boot impede carga; em runtime mantém último válido",
+          "location": "packages/settings/settings-file/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "describe nunca devolve o valor do segredo",
+          "location": "packages/credentials/credentials/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Credenciais em YAML legíveis pelas ferramentas do agente (mesmo usuário do SO)",
+          "location": "packages/credentials/credentials-local/README.md",
+          "confidence": "confirmed"
+        }
+      ],
+      "dependencies": [
+        "util"
+      ],
+      "complexity": "medium"
+    },
+    {
+      "name": "preset",
+      "path": "packages/preset",
+      "purpose": "Presets de agente (agent.cordis.yml + preset.yml) por sessão e persona por escopo",
+      "primary_files": [
+        "packages/preset/agent-presets/src/index.ts",
+        "packages/preset/agent-presets/presets/standard/agent.cordis.yml",
+        "packages/preset/persona/src/index.ts"
+      ],
+      "business_rules": [
+        {
+          "description": "Subagentes herdam a composição do preset do pai",
+          "location": "packages/preset/agent-presets/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Sem suporte a .claude/agents/*.md",
+          "location": "packages/preset (análise)",
+          "confidence": "confirmed"
+        }
+      ],
+      "dependencies": [
+        "core",
+        "extensions",
+        "skill"
+      ],
+      "complexity": "medium"
+    },
+    {
+      "name": "extensions + bundle + boot",
+      "path": "packages/boot, packages/bundle, packages/extensions",
+      "purpose": "Arranque do app a partir de perfis/bundles cordis com camadas de .env e patch, linha de comando por app e pacotes cordis dinâmicos criados pelo modelo",
+      "flowchart": "_reversa_sdd/flowcharts/composition.md",
+      "primary_files": [
+        "packages/boot/app-boot/README.md",
+        "packages/boot/cmdline/README.md",
+        "packages/bundle/base/cordis.patch.yml",
+        "packages/bundle/web-app/cordis.patch.yml",
+        "packages/bundle/headless/cordis.patch.yml",
+        "packages/bundle/acp-app/cordis.patch.yml",
+        "packages/bundle/sdk-app/cordis.patch.yml",
+        "packages/bundle/sdk-minimal/cordis.patch.yml",
+        "packages/extensions/tool-cordis/src/index.ts",
+        "packages/extensions/cordis-host-runner/README.md",
+        "packages/extensions/cordis-client-runner/README.md"
+      ],
+      "functions": [
+        {
+          "name": "boot",
+          "file": "packages/boot/app-boot",
+          "params": [
+            "appName",
+            "configPath"
+          ],
+          "returns": "Promise<Context>",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "installFailLoud",
+          "file": "packages/boot/app-boot",
+          "params": [
+            "appName"
+          ],
+          "returns": "void",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "exitOnStdinEnd",
+          "file": "packages/boot/cmdline",
+          "params": [
+            "ctx",
+            "label"
+          ],
+          "returns": "void",
+          "confidence": "confirmed"
+        }
+      ],
+      "entities": [
+        {
+          "name": "Profile",
+          "fields": [
+            {
+              "name": "bundles",
+              "type": "string[]",
+              "required": true
+            },
+            {
+              "name": "cordis.patch.yml",
+              "type": "file",
+              "required": false
+            },
+            {
+              "name": "patchReload",
+              "type": "live|startup",
+              "required": false
+            }
+          ],
+          "confidence": "confirmed"
+        },
+        {
+          "name": "SessionTelemetryOtelConfig",
+          "fields": [
+            {
+              "name": "mode",
+              "type": "FEEDBACK_ONLY|DISABLED",
+              "required": false
+            },
+            {
+              "name": "exporter.url",
+              "type": "url",
+              "required": true
+            },
+            {
+              "name": "shutdownTimeoutMillis",
+              "type": "int(3000)",
+              "required": false
+            }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        {
+          "description": "Falha de entrada obrigatória no arranque derruba o app; opcional só avisa",
+          "location": "packages/boot/app-boot/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": ".env de arquivo não pode definir PATH/DSH_*/XDG_*; proxies só do DSH_HOME",
+          "location": "packages/boot/app-boot/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Patch vazio falha o boot; [] desliga a camada",
+          "location": "packages/boot/app-boot/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "hooks e mcp-client não são montados pelo bundle base",
+          "location": "packages/bundle/base/cordis.patch.yml",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "session-log-deepseek e plugin-package-inventory-deepseek ligados por padrão; telemetria OTel em FEEDBACK_ONLY",
+          "location": "packages/bundle/base/cordis.patch.yml:36,70,184",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Metade browser de pacote dinâmico exige aprovação humana",
+          "location": "packages/extensions/cordis-client-runner/README.md",
+          "confidence": "confirmed"
+        }
+      ],
+      "algorithms": [
+        "Empilhamento de patches por precedência com avaliação !!js",
+        "Auditoria de entradas obrigatórias pós-settle",
+        "Resolução flag > valor de config via !!js",
+        "Sandbox node:vm + guard por whitelist"
+      ],
+      "dependencies": [
+        "vendor/cordis",
+        "util/home-paths",
+        "util/package-manifest"
+      ],
+      "complexity": "high"
+    },
+    {
+      "name": "acp",
+      "path": "packages/acp",
+      "purpose": "Servidor Agent Client Protocol v1 via stdio para automação de agentes persistentes (sessões, MCP, modelo, permissões, cancelamento)",
+      "flowchart": null,
+      "primary_files": [
+        "packages/acp/acp/src/index.ts",
+        "packages/acp/acp/src/session.ts",
+        "packages/acp/acp/src/mcp.ts",
+        "packages/acp/acp/src/model-control.ts",
+        "packages/acp/acp/src/updates.ts",
+        "packages/acp/acp/src/content.ts",
+        "packages/acp/acp/src/codec.ts",
+        "packages/subagent/subagent-acp/src/run.ts"
+      ],
+      "functions": [],
+      "entities": [
+        {
+          "name": "AcpConfig",
+          "fields": [
+            {
+              "name": "provider",
+              "type": "string",
+              "required": false
+            },
+            {
+              "name": "model",
+              "type": "string",
+              "required": false
+            },
+            {
+              "name": "sessionListPageSize",
+              "type": "int(100)",
+              "required": false
+            }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        {
+          "description": "Servidores MCP e workspace validados antes de publicar a sessão; falha faz rollback",
+          "location": "packages/acp/acp/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Um prompt por vez por sessão; seleção de modelo fixada durante o turno",
+          "location": "packages/acp/acp/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "authenticate sempre sucede; cliente é controlador confiável",
+          "location": "packages/acp/acp/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "session/load, fork, modes, commands, terminals e elicitation não suportados",
+          "location": "packages/acp/acp/README.md",
+          "confidence": "confirmed"
+        }
+      ],
+      "algorithms": [
+        "Paginação determinística newest-first",
+        "Fechamento quiescente com drenagem de updates"
+      ],
+      "dependencies": [
+        "core",
+        "session",
+        "llm",
+        "mcp",
+        "attachment"
+      ],
+      "complexity": "medium"
+    },
+    {
+      "name": "jobs + schedule",
+      "path": "packages/jobs, packages/schedule",
+      "purpose": "Jobs em background por agente com notificação de conclusão, e lembretes duráveis no log da sessão",
+      "flowchart": null,
+      "primary_files": [
+        "packages/jobs/jobs/README.md",
+        "packages/jobs/jobs-local/README.md",
+        "packages/jobs/tool-jobs/README.md",
+        "packages/schedule/schedule/src/index.ts",
+        "packages/schedule/schedule/src/tools.ts",
+        "packages/schedule/schedule/src/domain.ts"
+      ],
+      "functions": [
+        {
+          "name": "job_output",
+          "file": "packages/jobs/tool-jobs",
+          "params": [
+            "job_id",
+            "wait?",
+            "timeout_ms?"
+          ],
+          "returns": "string + [status]",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "schedule_create",
+          "file": "packages/schedule/schedule/src/tools.ts",
+          "params": [
+            "prompt",
+            "after|at|every",
+            "time_zone?"
+          ],
+          "returns": "ScheduleRecord",
+          "confidence": "confirmed"
+        }
+      ],
+      "entities": [
+        {
+          "name": "ToolJobsConfig",
+          "fields": [
+            {
+              "name": "waitTimeoutMs",
+              "type": "int(30000)",
+              "required": false
+            },
+            {
+              "name": "maxWaitTimeoutMs",
+              "type": "int(600000)",
+              "required": false
+            },
+            {
+              "name": "completionDelivery",
+              "type": "wakeup|quiet",
+              "required": false
+            },
+            {
+              "name": "maxConsecutiveWakes",
+              "type": "int(3)",
+              "required": false
+            }
+          ],
+          "confidence": "confirmed"
+        },
+        {
+          "name": "ScheduleRecord",
+          "fields": [
+            {
+              "name": "scheduleId",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "prompt",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "scheduledAt",
+              "type": "RFC3339 UTC",
+              "required": true
+            },
+            {
+              "name": "afterSeconds|everySeconds",
+              "type": "int",
+              "required": false
+            }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        {
+          "description": "Job pertence à sessão do agente dono; limite 10 por dono",
+          "location": "packages/jobs/jobs-local/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Wakeup de dono ocioso limitado a 3 consecutivos; mensagem do usuário zera",
+          "location": "packages/jobs/tool-jobs/README.md:94",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Lembrete every exige intervalo >= 5 min; sem backlog de intervalos perdidos",
+          "location": "packages/schedule/schedule/README.md:48,121",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Lembrete dispara só com agente ocioso, como mensagem user-role marcada como não confiável",
+          "location": "packages/schedule/schedule/README.md:165-174",
+          "confidence": "confirmed"
+        }
+      ],
+      "algorithms": [
+        "Seleção da última ocorrência alinhada à âncora por aritmética inteira",
+        "Timers em segmentos com releitura do relógio",
+        "Fold de eventos schedule/change"
+      ],
+      "dependencies": [
+        "core",
+        "session",
+        "tools"
+      ],
+      "complexity": "medium"
+    },
+    {
+      "name": "web (fetch/search)",
+      "path": "packages/web",
+      "purpose": "Busca web multi-provedor e fetch HTTP seguro com conversão HTML para markdown",
+      "flowchart": null,
+      "primary_files": [
+        "packages/web/web/README.md",
+        "packages/web/tool-web/src/fetch.ts",
+        "packages/web/web-fetch-http/README.md",
+        "packages/web/web-search-deepseek/README.md",
+        "packages/web/web-search-exa/README.md",
+        "packages/web/web-search-perplexity/README.md"
+      ],
+      "functions": [
+        {
+          "name": "web_search",
+          "file": "packages/web/tool-web",
+          "params": [
+            "queries[1..4]"
+          ],
+          "returns": "answer? + sources[]",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "web_fetch",
+          "file": "packages/web/tool-web/src/fetch.ts",
+          "params": [
+            "url"
+          ],
+          "returns": "status + markdown",
+          "confidence": "confirmed"
+        }
+      ],
+      "entities": [
+        {
+          "name": "ToolWebConfig",
+          "fields": [
+            {
+              "name": "searchMaxResults",
+              "type": "int(8)",
+              "required": false
+            },
+            {
+              "name": "searchMaxQueries",
+              "type": "int(4)",
+              "required": false
+            },
+            {
+              "name": "fetchMaxOutputChars",
+              "type": "int(200000)",
+              "required": false
+            }
+          ],
+          "confidence": "confirmed"
+        },
+        {
+          "name": "WebFetchHttpConfig",
+          "fields": [
+            {
+              "name": "maxResponseBytes",
+              "type": "int(5000000)",
+              "required": false
+            },
+            {
+              "name": "maxBodyChars",
+              "type": "int(100000)",
+              "required": false
+            },
+            {
+              "name": "maxRedirects",
+              "type": "int(5)",
+              "required": false
+            }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        {
+          "description": "Fetch só para endereços públicos, conexão fixada, redirects de mesma origem, sem credenciais",
+          "location": "packages/web/web-fetch-http/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Conteúdo web rotulado como externo e não confiável",
+          "location": "packages/web/tool-web/README.md:150-163",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Busca DeepSeek custa um turno de modelo completo",
+          "location": "packages/web/web-search-deepseek/README.md",
+          "confidence": "confirmed"
+        }
+      ],
+      "algorithms": [
+        "Remoção de HTML ativo/oculto + turndown GFM",
+        "Seleção automática de provedor único utilizável"
+      ],
+      "dependencies": [
+        "llm",
+        "tools"
+      ],
+      "complexity": "medium"
+    },
+    {
+      "name": "lsp + terminal",
+      "path": "packages/lsp, packages/terminal",
+      "purpose": "Navegação de código read-only via servidores LSP locais e sessões de terminal interativo persistentes por agente",
+      "flowchart": null,
+      "primary_files": [
+        "packages/lsp/lsp/README.md",
+        "packages/lsp/lsp-stdio/README.md",
+        "packages/lsp/tool-lsp/README.md",
+        "packages/terminal/terminal/README.md",
+        "packages/terminal/terminal-bash/README.md",
+        "packages/terminal/tool-terminal/README.md"
+      ],
+      "functions": [
+        {
+          "name": "lsp",
+          "file": "packages/lsp/tool-lsp",
+          "params": [
+            "operation",
+            "file_path",
+            "line",
+            "character"
+          ],
+          "returns": "locations | hover",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "terminal_send",
+          "file": "packages/terminal/tool-terminal",
+          "params": [
+            "session_id",
+            "text",
+            "submit?",
+            "run_in_background?"
+          ],
+          "returns": "output | job id",
+          "confidence": "inferred"
+        }
+      ],
+      "entities": [
+        {
+          "name": "LspStdioConfig",
+          "fields": [
+            {
+              "name": "command",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "extensionToLanguage",
+              "type": "map",
+              "required": true
+            },
+            {
+              "name": "env",
+              "type": "map",
+              "required": false
+            }
+          ],
+          "confidence": "confirmed"
+        },
+        {
+          "name": "TerminalBashConfig",
+          "fields": [
+            {
+              "name": "shellDialect",
+              "type": "bash|pwsh",
+              "required": false
+            },
+            {
+              "name": "maxReadBytes",
+              "type": "int(262144)",
+              "required": false
+            }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        {
+          "description": "LSP somente leitura; sem rename, formatting, diagnostics",
+          "location": "packages/lsp/lsp/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Ambiente do servidor LSP sem variáveis KEY/PASSWORD/SECRET/TOKEN e DSH_*",
+          "location": "packages/lsp/lsp-stdio/README.md:54",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Sessões de terminal restritas ao agente criador",
+          "location": "packages/terminal/terminal/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "lsp e terminal não estão no bundle base",
+          "location": "packages/bundle/base/cordis.patch.yml",
+          "confidence": "confirmed"
+        }
+      ],
+      "algorithms": [
+        "Servidor LSP por workspace sob demanda, consultas serializadas",
+        "Detecção de prontidão de shell interativo"
+      ],
+      "dependencies": [
+        "subprocess",
+        "sandbox",
+        "fs",
+        "jobs"
+      ],
+      "complexity": "medium"
+    },
+    {
+      "name": "spill + storage + session-query",
+      "path": "packages/spill, packages/storage, packages/session-query",
+      "purpose": "Spill de saídas grandes para arquivo com preview, estado de aplicação durável fora do log, e busca/rastreamento do histórico de sessões",
+      "flowchart": null,
+      "primary_files": [
+        "packages/spill/spill/README.md",
+        "packages/spill/spill-local/README.md",
+        "packages/spill/spill-policy/README.md",
+        "packages/storage/storage-domain/README.md",
+        "packages/storage/storage-json/README.md",
+        "packages/storage/storage-sqlite/README.md",
+        "packages/session-query/session-query/README.md",
+        "packages/session-query/session-query-sqlite/README.md",
+        "packages/session-query/tool-session-query/README.md"
+      ],
+      "functions": [
+        {
+          "name": "spillStore.save",
+          "file": "packages/spill/spill",
+          "params": [
+            "text"
+          ],
+          "returns": "{locator,bytes,guidance}",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "session_search",
+          "file": "packages/session-query/tool-session-query",
+          "params": [
+            "query"
+          ],
+          "returns": "ranked sessions",
+          "confidence": "confirmed"
+        }
+      ],
+      "entities": [
+        {
+          "name": "SpillPolicyConfig",
+          "fields": [
+            {
+              "name": "maxInlineBytes",
+              "type": "int(base 50000)",
+              "required": false
+            }
+          ],
+          "confidence": "confirmed"
+        },
+        {
+          "name": "SessionQuerySqliteConfig",
+          "fields": [
+            {
+              "name": "path",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "openAt",
+              "type": "startup|first-search|never",
+              "required": false
+            }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        {
+          "description": "Resultado acima de 50.000 bytes vira preview head/tail com localizador",
+          "location": "packages/bundle/base/cordis.patch.yml:386-389",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Falha de spill mantém resultado original",
+          "location": "packages/spill/spill-policy/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Busca entre sessões autorizada só com cwd idêntico",
+          "location": "packages/session-query/tool-session-query/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "FTS desligado no base (openAt never)",
+          "location": "packages/bundle/base/cordis.patch.yml:129-133",
+          "confidence": "confirmed"
+        }
+      ],
+      "algorithms": [
+        "Preview head/tail",
+        "Índice FTS5 derivado com paginação por cursor",
+        "Publicação atômica de arquivos JSON"
+      ],
+      "dependencies": [
+        "session",
+        "tools",
+        "fs"
+      ],
+      "complexity": "medium"
+    },
+    {
+      "name": "attachment + ptc-runtime",
+      "path": "packages/attachment, packages/ptc-runtime",
+      "purpose": "Anexos duráveis endereçados por conteúdo com normalização de imagens, e execução isolada de programas do modelo que chamam ferramentas como funções async",
+      "flowchart": null,
+      "primary_files": [
+        "packages/attachment/attachment/README.md",
+        "packages/attachment/attachment-local/README.md",
+        "packages/ptc-runtime/ptc-runtime/README.md",
+        "packages/ptc-runtime/ptc-runtime-node/README.md",
+        "packages/experimental/ptc-runtime-python/README.md"
+      ],
+      "functions": [],
+      "entities": [
+        {
+          "name": "AttachmentLocalConfig",
+          "fields": [
+            {
+              "name": "maxImageBytes",
+              "type": "bytes(20MiB)",
+              "required": false
+            },
+            {
+              "name": "maxImagesPerMessage",
+              "type": "int(20)",
+              "required": false
+            },
+            {
+              "name": "normalizedImageMaxBytes",
+              "type": "bytes(4MiB)",
+              "required": false
+            }
+          ],
+          "confidence": "confirmed"
+        },
+        {
+          "name": "PtcRuntimeNodeConfig",
+          "fields": [
+            {
+              "name": "timeoutMs",
+              "type": "int(120000)",
+              "required": false
+            },
+            {
+              "name": "maxOutputBytes",
+              "type": "int(64MiB)",
+              "required": false
+            },
+            {
+              "name": "maxPendingCalls",
+              "type": "int(128)",
+              "required": false
+            }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        {
+          "description": "Arquivos genéricos não são enviados ao modelo; lidos sob demanda por caminho read-only",
+          "location": "packages/attachment/attachment/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Anexos deduplicados por conteúdo e nunca apagados automaticamente",
+          "location": "packages/attachment/attachment-local/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "PTC Node roda sob o mesmo sandbox do Bash; modo restrito falha fechado sem backend",
+          "location": "packages/ptc-runtime/ptc-runtime-node/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Cada execução PTC começa sem estado anterior",
+          "location": "packages/ptc-runtime/README.md",
+          "confidence": "confirmed"
+        }
+      ],
+      "algorithms": [
+        "Escada de qualidade para normalização de imagem",
+        "Store endereçado por conteúdo",
+        "Ponte RPC de bindings async host↔processo"
+      ],
+      "dependencies": [
+        "sandbox",
+        "subprocess",
+        "session",
+        "workflow"
+      ],
+      "complexity": "medium"
+    },
+    {
+      "name": "typert + api + sdk",
+      "path": "packages/typert, packages/api, packages/sdk",
+      "purpose": "Geração de schemas a partir de tipos TS, RPC host↔cliente para a UI web, e SDK JSON-RPC stdio para controle programático",
+      "flowchart": null,
+      "primary_files": [
+        "packages/typert/generator/README.md",
+        "packages/typert/registry/README.md",
+        "packages/api/gateway/README.md",
+        "packages/api/session-controller/README.md",
+        "packages/api/settings-controller/README.md",
+        "packages/sdk/protocol/src/transport.ts",
+        "packages/sdk/protocol/src/types.ts",
+        "packages/sdk/server/README.md",
+        "packages/sdk/client/README.md"
+      ],
+      "functions": [],
+      "entities": [
+        {
+          "name": "SdkProtocolMethods",
+          "fields": [
+            {
+              "name": "initialize",
+              "type": "request",
+              "required": true
+            },
+            {
+              "name": "session/prompt",
+              "type": "request",
+              "required": true
+            },
+            {
+              "name": "shutdown",
+              "type": "request",
+              "required": true
+            },
+            {
+              "name": "session.event",
+              "type": "notification",
+              "required": true
+            },
+            {
+              "name": "session.status",
+              "type": "notification",
+              "required": true
+            }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        {
+          "description": "Settings controller nunca devolve valores secretos",
+          "location": "packages/api/settings-controller/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Stdout do servidor SDK carrega só frames JSON-RPC",
+          "location": "packages/sdk/server/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "workspace-files pode ler fora do workspace (somente leitura)",
+          "location": "packages/api/workspace-files/README.md",
+          "confidence": "confirmed"
+        }
+      ],
+      "algorithms": [
+        "Geração build-time de schemas Zod a partir de tipos TS",
+        "Correlação de requisições e streams multiplexados no gateway"
+      ],
+      "dependencies": [
+        "vendor/cordis",
+        "session",
+        "settings",
+        "credentials"
+      ],
+      "complexity": "high"
+    },
+    {
+      "name": "vendor/cordis + util",
+      "path": "vendor, packages/util",
+      "purpose": "Framework de plugins com DI e ciclo de vida (Cordis vendored) e bibliotecas utilitárias de ambiente, paths, proxy, escrita atômica e retenção de saída",
+      "flowchart": null,
+      "primary_files": [
+        "vendor/README.md",
+        "vendor/cordis/src/fiber.ts",
+        "vendor/loader/src/index.ts",
+        "vendor/include/src/index.ts",
+        "packages/util/home-paths/README.md",
+        "packages/util/launch-environment/README.md",
+        "packages/util/http-proxy/README.md",
+        "packages/util/native-command/README.md",
+        "packages/util/atomic-write/README.md",
+        "packages/util/output-retention/README.md"
+      ],
+      "functions": [
+        {
+          "name": "Context.plugin",
+          "file": "vendor/cordis/src",
+          "params": [
+            "plugin",
+            "config?"
+          ],
+          "returns": "Fiber",
+          "confidence": "confirmed"
+        }
+      ],
+      "entities": [
+        {
+          "name": "LoaderEntry",
+          "fields": [
+            {
+              "name": "id",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "config",
+              "type": "object",
+              "required": false
+            },
+            {
+              "name": "inject",
+              "type": "string[]",
+              "required": false
+            },
+            {
+              "name": "disabled",
+              "type": "bool|!!js",
+              "required": false
+            }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        {
+          "description": "Mutações do Loader não são transacionais",
+          "location": "vendor/README.md (item 8)",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Ambiente resolvido em ordem fixa herdado > ./.env > home .env",
+          "location": "packages/util/launch-environment/README.md",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "atomic-write não chama fsync",
+          "location": "packages/util/atomic-write/README.md",
+          "confidence": "confirmed"
+        }
+      ],
+      "algorithms": [
+        "DI por inject com ativação ordenada",
+        "Descarte de efeitos por fiber dona",
+        "Retenção head/tail sem cortar UTF-8"
+      ],
+      "dependencies": [],
+      "complexity": "high"
+    },
+    {
+      "name": "apps/cli",
+      "path": "apps/cli",
+      "purpose": "Launcher dsh: seleção e criação de perfis, empilhamento de patches, gestão de plugins, dump de config e encerramento gracioso",
+      "flowchart": "_reversa_sdd/flowcharts/composition.md",
+      "primary_files": [
+        "apps/cli/src/bin.ts",
+        "apps/cli/src/args.ts",
+        "apps/cli/src/profile-boot.ts",
+        "apps/cli/src/plugin.ts",
+        "apps/cli/src/dump-config.ts",
+        "apps/cli/src/process-shutdown.ts",
+        "apps/cli/reference/README.md",
+        "apps/cli/config/examples/mcp-memory/memorix.cordis.yml"
+      ],
+      "functions": [],
+      "entities": [
+        {
+          "name": "LauncherFlags",
+          "fields": [
+            {
+              "name": "--profile",
+              "type": "string",
+              "required": false
+            },
+            {
+              "name": "--from-default-profile",
+              "type": "string",
+              "required": false
+            },
+            {
+              "name": "--patch",
+              "type": "path[]",
+              "required": false
+            },
+            {
+              "name": "--dump-config",
+              "type": "flag",
+              "required": false
+            }
+          ],
+          "confidence": "confirmed"
+        },
+        {
+          "name": "ProfileManifest",
+          "fields": [
+            {
+              "name": "bundles",
+              "type": "string[]",
+              "required": true
+            },
+            {
+              "name": "patchReload",
+              "type": "live|startup",
+              "required": false
+            }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        {
+          "description": "Patch substitui a config inteira da linha (sem deep-merge); camada posterior vence",
+          "location": "apps/cli/reference/README.md:9",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "SIGTERM sai 0, SIGINT sai 130, drenagem de 5 s, segundo sinal força",
+          "location": "apps/cli/reference/README.md:91",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Não há perfil TUI embutido; interface padrão é web",
+          "location": "apps/cli/README.md:28",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Overlays de MCP de memória não instalam o executável",
+          "location": "apps/cli/config/examples/mcp-memory/memorix.cordis.yml",
+          "confidence": "confirmed"
+        }
+      ],
+      "algorithms": [
+        "Repasse de argumentos não-launcher ao app",
+        "Auto-inicialização de perfis embutidos"
+      ],
+      "dependencies": [
+        "boot",
+        "bundle"
+      ],
+      "complexity": "medium"
+    }
+  ]
+}
