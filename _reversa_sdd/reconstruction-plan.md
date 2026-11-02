@@ -3,7 +3,7 @@
 **Stack:** Rust (edition 2021, resolver 3), Cargo workspace com crates `harness-*` e binário `dsh`; tokio, reqwest (rustls + certificados do SO), serde, rusqlite (FTS5), zstd, rmcp, agent-client-protocol, ratatui, portable-pty, windows-rs, keyring, rquickjs, tree-sitter. Alvo principal: `x86_64-pc-windows-msvc`.
 **Diretório do código:** `D:\dsh\dsh-rs` (repositório novo; o `deepseek-harness` não é alterado).
 **Gerado em:** 2026-11-01
-**Status:** 25 tarefas | 6 concluídas | 19 pendentes
+**Status:** 25 tarefas | 7 concluídas | 18 pendentes
 
 ---
 
@@ -81,15 +81,18 @@
 ---
 
 ### Tarefa 06 — Ferramentas compatíveis com o Claude Code
-**Status:** in_progress
+**Status:** done
 **Lê:** `_reversa_sdd/sdd/ferramentas-claude-code.md`
 **Constrói:** `crates/harness-tools`: contrato `ToolDef`, pipeline, Read/Write/Edit/NotebookEdit/Glob/Grep/Bash/PowerShell/WebFetch/WebSearch/TodoWrite/AskUserQuestion/ExitPlanMode/SessionSearch/`working_directory`, aliases minúsculos, read-before-write, spill, guarda anti-exfiltração de `.env`
 **Pronto quando:** os 7 cenários de aceitação da spec passam
+**Resultado (2026-11-02):** `harness-tools` com o contrato `ToolDef`/`Tool`/`ExecCtx`/`SessionState`, nomes Claude Code + aliases do dsh TS em matchers e `allowed-tools` (R1), validação de schema com caminho do campo, e `Pipeline` na ordem fixa: ferramenta → schema → `PermissionEngine` (trait; `AllowAll` até o `harness-claude-compat`) → guardas monotônicos (caminhos `Read(...)` negados e anti-exfiltração dos shells, R15) → hooks `PreToolUse` (`CommandHook`: JSON no stdin, exit 2 bloqueia com o stderr, `block`/`deny`/`ask` no stdout) → aprovação (falha fechado sem interface) → escalonamento de uma chamada (`sandbox_permissions` + `justification`) → execução → hooks `PostToolUse`, rótulo `<untrusted-content>` (R20) e spill (R17). `call_batch` roda as paralelas sob semáforo de 10 com as exclusivas como barreira. Ferramentas: `Read` (`cat -n`, 2.000 linhas, imagens), `Write`/`Edit` (read-before-write, `FS_STALE_VERSION`, escrita atômica com fsync, CRLF preservado), `NotebookEdit`, `Glob`/`Grep` (ignore + grep-searcher; arquivos negados não são lidos), `Bash`/`PowerShell` (one-shot, cwd persistente, `[exit code: N]`, timeout 120/600 s, cancelamento mata a árvore, PATH higienizado, `DSH_*`/`CLAUDE_PROJECT_DIR`, ConstrainedLanguage em read-only), `WebFetch` (só IP público, conexão fixada, redirects de mesma origem, 5 MB/30 s/200k caracteres, HTML→markdown, `prompt` via `Summarizer`), `WebSearch` (Brave, SearXNG), `TodoWrite`, `AskUserQuestion` (pending), `ExitPlanMode` e `working_directory`. As ferramentas de arquivo seguem o modo do sandbox (`SANDBOX_DENIED` com a dica de escalonamento fora do diretório efetivo). O `harness-sandbox` ganhou cancelamento cooperativo (`CommandSpec::cancel_flag`). `check.ps1 -Gnu` verde; 18 testes de aceitação cobrem os 7 cenários e os complementos.
+**Decisão (2026-11-02):** o Git Bash (MSYS/Cygwin) não roda sob o token restrito (`NtCreateDirectoryObject`/`CreateFileMapping` negados em integridade baixa e também média). Por escolha do usuário, no Windows o `Bash` roda só com o Job Object e o ambiente sem credenciais, inclusive em `workspace-write`; no `read-only` ele é recusado (`SANDBOX_UNAVAILABLE`) e a dica manda usar o `PowerShell`, que roda confinado.
+**Pendente:** `SessionSearch` e as demais ferramentas de histórico (precisam do índice FTS do `harness-store`, Tarefa 08/store); leitura de PDF; `run_in_background`/`BashOutput`/`KillShell` (spec 16); provedores Tavily/Exa/Perplexity; `RunCode` (`harness-script`); motor de permissões completo e carregamento dos hooks de `settings.json`/plugins (`harness-claude-compat`); 🟡 o shell dos hooks no Windows é o `cmd.exe /d /s /c`; 🟡 com proxy do sistema, a fixação de IP do `WebFetch` não se aplica (a checagem de IP público continua).
 
 ---
 
 ### Tarefa 07 — Loop do agente (turnos, passos, inbox, cancelamento)
-**Status:** pending
+**Status:** in_progress
 **Lê:** `_reversa_sdd/sdd/agent-loop-sessao.md`
 **Constrói:** `crates/harness-core::agent`: driver ReAct em tokio, inbox `next_turn`/`next_step`, checkpoints R4, concorrência com semáforo, pontos de extensão, system prompt por seções, `developer/message` para ferramentas dinâmicas, resume com fechamentos sintéticos
 **Pronto quando:** os 6 cenários de aceitação da spec passam com um LLM mock
