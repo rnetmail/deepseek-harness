@@ -3,7 +3,7 @@
 **Stack:** Rust (edition 2021, resolver 3), Cargo workspace com crates `harness-*` e binário `dsh`; tokio, reqwest (rustls + certificados do SO), serde, rusqlite (FTS5), zstd, rmcp, agent-client-protocol, ratatui, portable-pty, windows-rs, keyring, rquickjs, tree-sitter. Alvo principal: `x86_64-pc-windows-msvc`.
 **Diretório do código:** `D:\dsh\dsh-rs` (repositório novo; o `deepseek-harness` não é alterado).
 **Gerado em:** 2026-11-01
-**Status:** 25 tarefas | 17 concluídas | 8 pendentes
+**Status:** 25 tarefas | 18 concluídas | 7 pendentes
 
 ---
 
@@ -198,10 +198,13 @@
 ---
 
 ### Tarefa 17 — Sincronização VSCode → dsh e CatalogoSKILLs
-**Status:** pending
+**Status:** done
 **Lê:** `_reversa_sdd/sdd/catalog-sync.md`
 **Constrói:** `dsh sync add|status|run|log`, watcher + reconciliação, manifesto SHA-256, escopo global com namespace, varredura de segredos, `dsh catalog build` (`.zip` + `.7z` reprodutíveis)
 **Pronto quando:** os 5 cenários de aceitação da spec passam
+**Resultado (2026-11-02):** `harness-claude-compat::sync`: `~/.dsh/sync.toml` (`[[source]]` com `kinds`, `scope`, `data_gate`, `[source.global]` e `[source.catalog]` com `"@global"`, `zip`, `sevenzip`, `per_skill_zip`, `auto_build`); itens por tipo (skills, agents, commands, `CLAUDE.md`), `CatalogoSKILLs/` nunca é fonte (R3); escopo `workspace` lido ao vivo e só `global` copiado para `~/.dsh/synced/<fonte>/` e carregado como `<fonte>:<nome>` fora do workspace da fonte, com `data_gate` na skill (R2, R13); manifesto `manifest.json` com SHA-256 por arquivo e `tree_hash` (R5), aplicação por item com staging + rename (R6), removidos `disabled` e na `.trash` por 30 dias com limpeza (R7), renomeação ligada pelo `tree_hash` no log (R8), cópia editada à mão vira `conflict` com os arquivos alterados e só cede com `--accept-source` (R9), skill que sai da lista global perde a cópia e segue no workspace, fonte inacessível = `offline` sem erro; exclusões de `.env`/`*.env`/`settings.local.json`/`navegador-perfis`/`agent-memory`/`__pycache__`/`*.pyc`/`node_modules`/> 10 MB (R11); varredura de segredos por linha com arquivo e linha sem o valor, item `blocked` fora da cópia e do catálogo (R12; detector ganhou senha curta `password=Abc123`/`Pwd=` e string de conexão Oracle `usuario/senha@host:porta/serviço`); `sync-log.jsonl` sem conteúdo (R19); watcher (`notify` + debouncer de 2 s, ignora a saída do catálogo e reconcilia só a fonte que mudou) e `reconcile_all` para o arranque (R4). `catalog_build`: copia as skills da lista para `CatalogoSKILLs/<nome>/`, remove as que saíram (inclusive apagadas na fonte), mantém e lista os não gerenciados como o `.rar` (R18), avisa quando regrava uma cópia editada no catálogo (R3), gera `.zip` (deflate) e `.7z` (`sevenz-rust2`, LZMA2) e os zips por skill com entradas em ordem, `/`, data fixa 1980-01-01 e sem metadados do SO (R15, R17), tudo em staging dentro da saída (R14); `--check` lista o que está desatualizado; `auto_build` depois de uma sincronização que mudou uma skill incluída (R16). CLI `dsh sync add|status|run [--dry-run] [--source] [--accept-source]|log` e `dsh catalog build [--source] [--check]`. 6 testes de aceitação + unitários; `check.ps1 -Gnu` verde.
+**Decisão (2026-11-02):** 🟡 `notify-debouncer-mini` (já usado no `harness-core`) no lugar do `-full`, e sem `walkdir`/`globset` (exclusões fixas da R11). 🟡 Data das entradas dos pacotes fixa em 1980-01-01 (não a do arquivo mais novo), para o hash depender só do conteúdo. 🟡 O mtime não é usado como atalho (R5 opcional): as skills são pequenas e o hash é recalculado. 🟡 Entradas dos pacotes com o prefixo `<skill>/`; o formato interno dos zips atuais do Totvs não foi conferido (arquivos reais não lidos). 🟡 Versões fixadas com pelo menos duas semanas: `zip` 9.0.5 (a 8.6.0 tem quatro alertas RUSTSEC de extração, corrigidos na 9.x) e `sevenz-rust2` 0.23.0.
+**Pendente:** registrar a fonte real `D:/Projetos/Totvs AGP/VSCode` com a lista das 8 skills e conferir o catálogo gerado contra o atual (depende da sua autorização para usar os arquivos); ligar o watcher e a reconciliação no arranque da sessão, a notificação discreta na TUI e o catálogo substituto no próximo passo (R10, Tarefa 21); `dsh sync status` com diff de conteúdo (hoje lista os arquivos alterados).
 
 ---
 
