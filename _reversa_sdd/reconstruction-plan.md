@@ -3,7 +3,7 @@
 **Stack:** Rust (edition 2021, resolver 3), Cargo workspace com crates `harness-*` e binário `dsh`; tokio, reqwest (rustls + certificados do SO), serde, rusqlite (FTS5), zstd, rmcp, agent-client-protocol, ratatui, portable-pty, windows-rs, keyring, rquickjs, tree-sitter. Alvo principal: `x86_64-pc-windows-msvc`.
 **Diretório do código:** `D:\dsh\dsh-rs` (repositório novo; o `deepseek-harness` não é alterado).
 **Gerado em:** 2026-11-01
-**Status:** 25 tarefas | 16 concluídas | 9 pendentes
+**Status:** 25 tarefas | 17 concluídas | 8 pendentes
 
 ---
 
@@ -187,10 +187,13 @@
 ---
 
 ### Tarefa 16 — Plugins e marketplaces
-**Status:** pending
+**Status:** done
 **Lê:** `_reversa_sdd/sdd/plugins-marketplace.md`
 **Constrói:** leitura de `~/.claude/plugins`, `dsh plugin marketplace add|list|update|remove`, `install|enable|disable|uninstall|update|validate`, cache versionado, confiança para hooks e MCP, namespaces
 **Pronto quando:** os 5 cenários de aceitação da spec passam (com `coreos/ai-helpers`)
+**Resultado (2026-11-02):** `harness-claude-compat::plugins`: `marketplace.json` (`source` relativo, `github`, `url`; `metadata.pluginRoot`), `plugin.json` em `.claude-plugin/` ou na raiz (como parte do ai-helpers) ou ausente (nome da pasta/registro), caminhos extras de `commands`/`agents`/`skills` e `hooks`/`mcpServers` por caminho ou inline; componentes com namespace `<plugin>:<item>` (comandos, agentes `subagent_type`, skills) e `${CLAUDE_PLUGIN_ROOT}` resolvido em hooks, MCP, prompts de agente e corpo de comando; hooks de plugin entram depois dos das settings com `CLAUDE_PLUGIN_ROOT` exportado (R9, `Layer::Plugin`, evento sem suporte = aviso); MCP como `<plugin>_<srv>` com origem `Plugin` pelas mesmas regras do cliente (R10, `harness_mcp::config::plugin_servers`); registro `~/.dsh/plugins/installed.json`; descoberta dos instalados pelo dsh e dos do Claude Code (`~/.claude/plugins/installed_plugins.json` v1/v2 + `enabledPlugins`, somente leitura), um só por `plugin@mkt` com a versão mais nova (R1), `enabledPlugins` do projeto vale só nele (R3), plugin inválido ou pasta ausente fica fora com o erro na lista (R8); forma curta `/nome` só quando única e itens de projeto/usuário vencem (R2, `Workspace::resolve_command`); `validate`. `harness-claude-compat::commands`: `$ARGUMENTS`, `$1`…`$9` (separação estilo shell), `` !`cmd` `` e `@caminho`. `harness-agent::commands::render`: cada `` !`cmd` `` passa pelo pipeline como `Bash` (permissões, guardas, hooks, aprovação) e, negado, o comando não é enviado e a regra aparece (R7); `@caminho` pelo `Read`. `harness-integrations::plugins`: `marketplace add|list|update|remove` em `~/.dsh/plugins/marketplaces/<mkt>/`, `install` no cache imutável `cache/<mkt>/<plugin>/<versão>/` com `sha256` da árvore e commit (R4), confirmação mostrando os comandos dos hooks e servidores MCP e de novo em atualização que os mude, que fica pendente sem confirmação (R5), rollback `--version`, `update [--all]` (marketplace sem rede = erro e o cache continua valendo), `enable|disable|uninstall`, `list --available` com o argumento exato de instalação (U1); REA: ao instalar o `rea-agents`, o pacote vira plugin local `rea@dsh-integrations` lido no lugar, sem duplicar a skill que já exista e com o MCP só do registro gerenciado (R12). Nenhum inventário é enviado (R14). CLI `dsh plugin marketplace add|list|update|remove`, `install [--version] [--yes]`, `list [--available]`, `enable|disable|uninstall`, `update [--all]`, `validate`. 6 testes de aceitação + unitários; teste real `dsh plugin marketplace add coreos/ai-helpers` listou os 4 plugins e instalou `jenkins-analyzer` 0.1.0; `check.ps1 -Gnu` verde.
+**Decisão (2026-11-02):** 🟡 download sem `gix`: `owner/repo` do GitHub vem como tarball do commit fixado (API + codeload, reqwest/rustls com os certificados do SO, sem git instalado); URL git usa o `git` do sistema; caminho local é copiado. 🟡 `allowed-tools` de comando: com a lista declarada, `` !`cmd` `` fora dela é recusado; dentro dela valem as regras normais (o `allow` temporário segue pendente, como nas skills). 🟡 O pacote npm `rea-agents` 4.0.1 não traz `.claude-plugin/plugin.json`: vira plugin `rea` sem manifesto (skills do pacote). 🟡 O `jenkins-analyzer` real não tem agentes; o agente `failure-analyzer` do cenário 2 é coberto com fixture.
+**Pendente:** `/plugin …` na TUI e recarga imediata com a TUI aberta (Tarefa 21); ligar comandos de plugin no loop (`invoke_command`), hooks de plugin no pipeline e MCP na sessão (Tarefa 21); políticas do workspace (`allowed_providers`, `data_gate`) para `model:` de agentes e comandos de plugin (R11, entra com a resolução de modelo da sessão); repositório privado do GitHub (token); assinatura ou checagem de integridade além do `sha256` local.
 
 ---
 
