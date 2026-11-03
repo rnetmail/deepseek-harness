@@ -3,7 +3,7 @@
 **Stack:** Rust (edition 2021, resolver 3), Cargo workspace com crates `harness-*` e binário `dsh`; tokio, reqwest (rustls + certificados do SO), serde, rusqlite (FTS5), zstd, rmcp, agent-client-protocol, ratatui, portable-pty, windows-rs, keyring, rquickjs, tree-sitter. Alvo principal: `x86_64-pc-windows-msvc`.
 **Diretório do código:** `D:\dsh\dsh-rs` (repositório novo; o `deepseek-harness` não é alterado).
 **Gerado em:** 2026-11-01
-**Status:** 25 tarefas | 15 concluídas | 10 pendentes
+**Status:** 25 tarefas | 16 concluídas | 9 pendentes
 
 ---
 
@@ -176,10 +176,13 @@
 ---
 
 ### Tarefa 15 — Memória (por agente, automática, GBrain)
-**Status:** pending
+**Status:** done
 **Lê:** `_reversa_sdd/sdd/memoria-gbrain.md`
 **Constrói:** carga de `MEMORY.md` por contexto, gravação com permissão implícita, espelhamento para o GBrain, escopo por workspace, seção brain-first v2, backup
 **Pronto quando:** os 5 cenários de aceitação da spec passam
+**Resultado (2026-11-02):** `harness-claude-compat::memory`: slug do Claude Code (`d:\dsh` → `d--dsh`, reaproveitando a pasta existente em outra caixa), `MEMORY.md` limitado a 200 linhas/25 KB (R1), seção de prompt com o formato `name`/`description`/`metadata.type`, regras de gravação (R5, R7) e o aviso de verificar o que a memória cita (R3); `AgentDeps.memory` (`MemoryContext`) coloca a memória automática na sessão principal e a do agente no subagente, e nada num subagente sem `memory` (R2). `harness-tools`: `SessionState.memory_dir`/`memory_roots`; `Write`/`Edit` no diretório de memória da sessão passam sem aprovação depois das regras `deny` (inclusive no sandbox `workspace-write`, fora do projeto), um subagente não grava na memória de outro agente e o modo `plan` continua sem edições (R6); detector de segredos reutilizável (`secrets::find`) bloqueia a gravação (R7); `WriteObserver` avisado depois de cada `Write`/`Edit`. `harness-integrations::gbrain`: config `[gbrain]`/`[memory.mirror]` do `~/.dsh/memory.toml` e `[memory]` do workspace; bloco brain-first v2 lido do GBrain instalado (`setup chatgpt --instructions-only --dry-run`, cache por versão, texto oficial embutido como reserva) com a fonte do workspace em `source_ids` (R4); aviso de GBrain indisponível com a memória markdown funcionando (R16); fontes registradas com `gbrain sources add <id> --path <dir>`, as de `scope = "workspace"` com `--no-federated` (fora da busca padrão), registro em `~/.dsh/gbrain/sources.json` (R12/R13); `ScopeFilter` no MCP `gbrain` recusa `source_id(s)` restritos e tira dos resultados o que vier deles (R13); `gbrain sync --source <id> --no-pull` depois de cada gravação (`MirrorObserver`) e no arranque, com `--no-embed` para fonte `local-only` se os embeddings forem remotos (R11/R12); chaves de embeddings remotos fora do ambiente de todo comando e do servidor GBrain (R11); registro `serve --surface starter --advertise verbs` (R9), `gbrain init --pglite` (`--no-embedding` sem Ollama) na instalação (R8); Memorable nunca ligado pelo dsh, `memorable = true` só gera aviso (R10); backup com `gbrain export` + cópia do PGLite, mantendo 14 (R15). 5 cenários de aceitação + testes unitários; `check.ps1 -Gnu` verde.
+**Decisão (2026-11-02):** 🟡 o escopo usa o mecanismo nativo do GBrain (`--no-federated`) mais o filtro do dsh, em vez de só filtrar resultados. 🟡 Fontes: `<gbrain_source>` = `.claude/agent-memory` e `<gbrain_source>-auto` = memória automática do cwd; sem `gbrain_source`, `mem-<slug>`.
+**Pendente:** validar com um brain real (o GBrain instalado não foi inicializado: `gbrain init` grava em `~/.gbrain` e só roda em `dsh integrations install gbrain`); confirmar se `sources add` aceita pasta sem git com dados; captura automática com opt-in (R4b) e reforço brain-first por turno; agendar o backup diário e a reconciliação no arranque, e ligar `MemoryContext`, `ScopeFilter` e `MirrorObserver` na sessão (Tarefa 21); oferecer `gbrain setup claude-code` no doctor (R14); `takes_supersede` nas contradições é do próprio GBrain.
 
 ---
 
