@@ -3,7 +3,7 @@
 **Stack:** Rust (edition 2021, resolver 3), Cargo workspace com crates `harness-*` e binário `dsh`; tokio, reqwest (rustls + certificados do SO), serde, rusqlite (FTS5), zstd, rmcp, agent-client-protocol, ratatui, portable-pty, windows-rs, keyring, rquickjs, tree-sitter. Alvo principal: `x86_64-pc-windows-msvc`.
 **Diretório do código:** `D:\dsh\dsh-rs` (repositório novo; o `deepseek-harness` não é alterado).
 **Gerado em:** 2026-11-01
-**Status:** 25 tarefas | 20 concluídas | 5 pendentes
+**Status:** 25 tarefas | 21 concluídas | 4 pendentes
 
 ---
 
@@ -234,10 +234,13 @@ Substituição aprovada: `dsh catalog build` regravou `CatalogoSKILLs.zip` (20 e
 ---
 
 ### Tarefa 20 — Retenção de anexos, spill e sessões
-**Status:** pending
+**Status:** done
 **Lê:** `_reversa_sdd/sdd/retencao-anexos-spill.md`
 **Constrói:** GC mark-and-sweep de anexos, limpezas por política, `session_max_days`, `dsh storage usage|gc`, `dsh sessions delete`
 **Pronto quando:** os 4 cenários de aceitação da spec passam
+**Resultado (2026-11-05):** `harness-store::blobs`: anexos endereçados por conteúdo em `~/.dsh/attachments/<aa>/<sha256>`, deduplicados, gravados por arquivo temporário + rename e conferidos pelo hash na leitura; eventos os referenciam por `sha256:<hex>` (R1). `harness-store::retention`: mark-and-sweep (marca toda referência `sha256:` em qualquer evento de qualquer sessão; remove só blob sem referência com mtime além da carência de 7 dias e anterior ao início da varredura; sessão ilegível = nenhum anexo removido, com aviso), R1/R2; remoção explícita de sessão com as subsessões (por `parentSession`) e o spill delas, anexos órfãos no GC seguinte (R3); `session_max_days` por workspace (padrão global em `~/.dsh/config.toml`, 0 = desligado): sessões com `cwd` dentro do workspace e último evento mais velho que N dias, com confirmação única registrada em `state/retention-consent.json`, inclusive a recusa (R4); spill com mais de `spill_days` (sem seguir symlinks) e `purge_session_spill` para `purge_spill_on_close` (R5); lixeira do sync com mais de 30 dias, logs com mais de 14 dias ou acima de 100 MB, cache de plugins com a versão ativa mais uma anterior; memória nunca tocada (R6); `logs/retention.jsonl` com tipo, quantidade, bytes e política, sem conteúdo (R7); `--dry-run` lista tudo sem remover nem gravar (R8); `gc_due` limita o GC automático a uma vez por dia; `usage` por tipo e por workspace. CLI `dsh storage usage`, `dsh storage gc [--dry-run]`, `dsh sessions delete <id> | --workspace <dir> --older-than <dias> [--dry-run]`. 4 cenários de aceitação + teste do cache de plugins e do `usage`; `check.ps1 -Gnu` verde.
+**Decisão (2026-11-05):** 🟡 o dsh Rust ainda não tinha armazenamento de anexos: ele nasce aqui, no formato `sha256:<hex>` que o GC reconhece. 🟡 Referência = qualquer string `sha256:<64 hex>` nos dados de um evento (marca a mais, nunca a menos). 🟡 Versão "anterior" do cache de plugins = a mais recente entre as não ativas (mtime da pasta).
+**Pendente:** GC no arranque em segundo plano com prioridade baixa e `purge_spill_on_close` ao fechar a sessão (Tarefa 21); offload de imagens e screenshots usando o `BlobStore` (spec 14, junto da sessão); entrada no índice FTS quando ele existir; `dsh rea prune --older-than`.
 
 ---
 
