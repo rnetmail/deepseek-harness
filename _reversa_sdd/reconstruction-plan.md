@@ -3,7 +3,7 @@
 **Stack:** Rust (edition 2021, resolver 3), Cargo workspace com crates `harness-*` e binário `dsh`; tokio, reqwest (rustls + certificados do SO), serde, rusqlite (FTS5), zstd, rmcp, agent-client-protocol, ratatui, portable-pty, windows-rs, keyring, rquickjs, tree-sitter. Alvo principal: `x86_64-pc-windows-msvc`.
 **Diretório do código:** `D:\dsh\dsh-rs` (repositório novo; o `deepseek-harness` não é alterado).
 **Gerado em:** 2026-11-01
-**Status:** 25 tarefas | 21 concluídas | 4 pendentes
+**Status:** 25 tarefas | 22 concluídas | 3 pendentes
 
 ---
 
@@ -245,10 +245,13 @@ Substituição aprovada: `dsh catalog build` regravou `CatalogoSKILLs.zip` (20 e
 ---
 
 ### Tarefa 21 — Superfícies: TUI, headless, ACP e SDK
-**Status:** in_progress
+**Status:** done
 **Lê:** `_reversa_sdd/sdd/superficies-tui-headless-acp-sdk.md`
 **Constrói:** `crates/harness-tui` (ratatui), `dsh -p` com `stream-json` compatível, `crates/harness-acp` (servidor + `session/load`, modos e comandos), `crates/harness-sdk` (JSON-RPC), sinais e códigos de saída
 **Pronto quando:** os 6 cenários de aceitação da spec passam
+**Resultado (2026-11-05):** `harness-sdk`: `Follower` (acompanha o log ao vivo por `subscribe_events`/`events_after`), `stream_json::Translator` (linhas `init`, `assistant`, `user` com `tool_result` e extras em `"dsh"`, `result` com subtype, is_error, duration_ms, num_turns, result, session_id, total_cost_usd, usage, permission_denials, uuid; entrada `stream-json`), `NoResponder`/`ChannelResponder`, `SessionHost` com `MaxTurns` (R6) e `ModelSwitch` (troca vale no próximo turno, R3), `Headless` com códigos 0/1/2/3/130 (R5), servidor JSON-RPC 2.0 NDJSON (`initialize`, `session/prompt` com recibo durável após flush, `session/cancel`, `session/approve`, `session/list`, `shutdown`; notificações `session.event`, `session.status`, `subagent.started/finished`, `session.approval`). `harness-acp`: `initialize`, `authenticate`, `session/new` (cwd absoluto; rollback se o MCP falha), `session/load` (replay) e `/resume`, `/list` paginado, `/close`, `/prompt` (um por vez), `/cancel`, `$/cancel_request`, `/set_mode`, `/set_config_option`, `request_permission`, `available_commands_update`, plano a partir do TodoWrite; desconexão cancela e descarta. `harness-tui` (ratatui 0.30.2): transcrição, barra de status com modelo pedido/efetivo e fallback, diálogos de aprovação/perguntas, Shift+Tab nos modos, Esc cancela, Ctrl+C duplo sai, histórico, completação de `/` e `@`, 17 comandos embutidos, `!cmd` pelo pipeline (R11), skills e comandos do workspace, monocromático com `NO_COLOR`/`TERM=dumb`. `harness-cli`: `dsh [prompt]`, `-p`, `--output-format`, `--input-format`, `--max-turns`, `-c`, `-r [id]`, `--allowedTools`, `--disallowedTools`, `--append-system-prompt`, `--mcp-config`, `--add-dir`, `dsh acp`, `dsh serve`; montagem da sessão (regras de permissão, hooks, subagentes, seções de prompt, memória, MCP); sinais (Ctrl+C cancela, 5 s de drenagem → 130, segundo sinal sai); GC de arranque e `purge_spill_on_close`. `SessionHandle::release` libera o lock no `dispose` mesmo com clones vivos (bug achado no teste do `-r`). 6 cenários de aceitação + testes de teclas e do diálogo de aprovação; `check.ps1 -Gnu` verde; `dsh.exe` gerado e testado (`--help`, uso inválido → 2).
+**Decisão (2026-11-05):** 🟡 JSON-RPC do ACP escrito à mão sobre o mesmo laço NDJSON do SDK (sem o crate `agent-client-protocol`). 🟡 `num_turns` conta os passos do modelo. 🟡 Negação sem respondente → saída 3 mesmo com o turno concluído. 🟡 Perguntas no ACP viram `request_permission` com as opções. 🟡 Streaming por mensagem inteira, não por delta de token. 🟡 Esc Esc devolve a última mensagem ao campo de entrada (sem fork). 🟡 GC de arranque nunca expira sessões (só anexos, spill, lixeira, logs, plugins). 🟡 Data gate na sessão usa `NoPrompter` (recusa sem perguntar).
+**Pendente:** fork de sessão no Esc Esc; terminais do ACP e o lado cliente do ACP; deltas de token ao vivo; imagens coladas; prompt do data gate na TUI; `dsh update` (Tarefa 23); thread de prioridade baixa para o GC; eventos de fallback do LLM no log da sessão.
 
 ---
 
