@@ -245,7 +245,7 @@ Substituição aprovada: `dsh catalog build` regravou `CatalogoSKILLs.zip` (20 e
 ---
 
 ### Tarefa 21 — Superfícies: TUI, headless, ACP e SDK
-**Status:** pending
+**Status:** in_progress
 **Lê:** `_reversa_sdd/sdd/superficies-tui-headless-acp-sdk.md`
 **Constrói:** `crates/harness-tui` (ratatui), `dsh -p` com `stream-json` compatível, `crates/harness-acp` (servidor + `session/load`, modos e comandos), `crates/harness-sdk` (JSON-RPC), sinais e códigos de saída
 **Pronto quando:** os 6 cenários de aceitação da spec passam
