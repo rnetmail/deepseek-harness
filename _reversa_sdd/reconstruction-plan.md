@@ -3,7 +3,7 @@
 **Stack:** Rust (edition 2021, resolver 3), Cargo workspace com crates `harness-*` e binário `dsh`; tokio, reqwest (rustls + certificados do SO), serde, rusqlite (FTS5), zstd, rmcp, agent-client-protocol, ratatui, portable-pty, windows-rs, keyring, rquickjs, tree-sitter. Alvo principal: `x86_64-pc-windows-msvc`.
 **Diretório do código:** `D:\dsh\dsh-rs` (repositório novo; o `deepseek-harness` não é alterado).
 **Gerado em:** 2026-11-01
-**Status:** 25 tarefas | 23 concluídas | 2 pendentes
+**Status:** 25 tarefas | 24 concluídas | 1 pendente
 
 ---
 
@@ -267,10 +267,13 @@ Substituição aprovada: `dsh catalog build` regravou `CatalogoSKILLs.zip` (20 e
 ---
 
 ### Tarefa 23 — Release, assinatura minisign e `dsh update`
-**Status:** pending
+**Status:** done
 **Lê:** `_reversa_sdd/sdd/build-release.md`
 **Constrói:** `xtask dist|sign`, vendoring filtrado, `SHA256SUMS` + `.minisig`, `dsh-verify.ps1`, `dsh update` sem Mark-of-the-Web, `THIRD_PARTY_NOTICES` (MIT DeepSeek)
 **Pronto quando:** os 4 cenários de aceitação da spec passam
+**Resultado (2026-11-06):** `xtask`: `keygen` (par minisign; secreta em `%USERPROFILE%\.dsh-release\minisign.key`, fora dos repositórios; pública em `crates/harness-cli/release/minisign.pub`, embutida no binário), `notices` (`THIRD_PARTY_NOTICES.md` a partir do `cargo metadata`: 375 crates alcançáveis pelo `harness-cli` nas 4 plataformas, com o texto de licença de cada pacote e o aviso MIT da DeepSeek no topo), `vendor` (`cargo vendor-filterer` com `[workspace.metadata.vendor-filter]` + `dsh-<v>-vendor.tar.zst` determinístico), `dist --target` (build release `--locked`, `--offline` com `vendor/`, `SOURCE_DATE_EPOCH` do commit, `--remap-path-prefix` e `-ffile-prefix-map` no código C para o repositório, a pasta de build e o CARGO_HOME nas grafias `\` e `/`, PE sem carimbo de data; `.zip` com datas fixas; Authenticode opcional por `DSH_AUTHENTICODE_PFX`), `sign` (`SHA256SUMS` + `SHA256SUMS.minisig`, conferido contra a chave pública embutida) e `repro` (duas builds em pastas diferentes e comparação). `dsh update [--check] [--channel stable|rc] [--from <zip>]`: só `GET`s com o `User-Agent` ao `rnetmail/dsh-rs` (R7), minisign do `SHA256SUMS` + SHA-256 do pacote antes de tocar no binário, troca atômica (`.new` → renomeia o atual para `.old` → põe o novo; falha → `.old` volta; o `.old` some na execução seguinte), binário gravado pelo próprio dsh, sem `Zone.Identifier` (R8.3). `release/dsh-verify.ps1` (hashes + `minisign -Vm` com a chave embutida; sem minisign avisa e sai com 2), `release/README.md` (verificação, `Unblock-File`, SmartScreen, AppLocker), `LICENSE` (MIT, Robson Souza), `CHANGELOG.md` com "Portado do upstream". Cenários: (1) `cargo xtask repro --target x86_64-pc-windows-gnu`: os dois `dsh.exe` com o mesmo SHA-256 (`59c160fb…`) e pacotes idênticos, sem caminhos locais no binário; (2) `xtask/tests/deny_agpl.rs`: AGPL e GPL reprovadas pelo `deny.toml`, controle MIT aprovado; (3) testes do `update`: assinatura de outra chave ou corrompida e pacote adulterado abortam com o binário intacto, sem `.old`; ponta a ponta com o binário release e a chave real (válido → trocado; `.minisig` adulterado → abortado, intacto); (4) `dsh --version --verbose` com versão, commit, MSRV e base do upstream (teste existente). `check.ps1 -Gnu` (agora com `--workspace`, inclui o `xtask`) verde.
+**Decisão (2026-11-06):** 🟢 Chave minisign gerada sem senha e guardada fora dos repositórios (decisão do usuário); `DSH_MINISIGN_PASSWORD` serve se ela for trocada por uma com senha. 🟢 LICENSE MIT em nome de Robson Souza; canal oficial `rnetmail/dsh-rs` (decisão do usuário). 🟡 Atualização implementada à mão (`minisign-verify` + `zip`), sem o `self_update`. 🟡 `THIRD_PARTY_NOTICES` gerado pelo `xtask notices` em vez do `cargo about` (não instalado), com os textos de licença lidos de cada pacote. 🟡 Authenticode no `dist` (antes de empacotar), não no `sign`, porque o `.exe` vai dentro do `.zip`. 🟡 `dsh-verify.ps1` confere a assinatura com o `minisign.exe` (o PowerShell 5.1 não tem Ed25519/BLAKE2b); sem ele, sai com 2 e mostra como instalar. 🟡 `dsh update` aplica só pacotes `.zip` (Windows), o alvo principal.
+**Pendente:** CI no GitHub (workflow de tag com build MSVC x86_64/arm64, `deny` e `cargo audit`; o `cargo-audit` não está instalado aqui); build MSVC e o `/d1trimfile:` do cl.exe sem verificação local (sem Windows SDK; o repro passou no alvo GNU); `cargo xtask vendor` sem execução (falta `cargo install cargo-vendor-filterer`); `dsh doctor` detectando AppLocker/WDAC e mostrando o hash (R8.4); aplicar `.tar.gz` no Linux/macOS; testes de conformidade v3/v4 contra fixtures do upstream (R4); publicar o primeiro release.
 
 ---
 
