@@ -3,7 +3,7 @@
 **Stack:** Rust (edition 2021, resolver 3), Cargo workspace com crates `harness-*` e binário `dsh`; tokio, reqwest (rustls + certificados do SO), serde, rusqlite (FTS5), zstd, rmcp, agent-client-protocol, ratatui, portable-pty, windows-rs, keyring, rquickjs, tree-sitter. Alvo principal: `x86_64-pc-windows-msvc`.
 **Diretório do código:** `D:\dsh\dsh-rs` (repositório novo; o `deepseek-harness` não é alterado).
 **Gerado em:** 2026-11-01
-**Status:** 25 tarefas | 22 concluídas | 3 pendentes
+**Status:** 25 tarefas | 23 concluídas | 2 pendentes
 
 ---
 
@@ -256,10 +256,13 @@ Substituição aprovada: `dsh catalog build` regravou `CatalogoSKILLs.zip` (20 e
 ---
 
 ### Tarefa 22 — Upstream-sync (`dsh upstream`)
-**Status:** pending
+**Status:** done
 **Lê:** `_reversa_sdd/sdd/upstream-sync.md`, `_reversa_sdd/upstream/ledger.md`
 **Constrói:** `dsh upstream status|fetch|diff|triage|mark|baseline`, ledger JSON, rejeição automática por padrões de envio de dados
 **Pronto quando:** os 5 cenários de aceitação da spec passam; o ledger do ciclo 1 é importado
+**Resultado (2026-11-05):** `harness-integrations::upstream`: fontes só leitura (R1) atrás do trait `Http`, que só tem `GET` (GitHub Releases `dsh-v*`, dist-tags do npm `@deepseek-ai/dsh`, tarball da tag no codeload); token opcional do cofre `dsh/github/token` só para a API do GitHub, e espera da janela do limite de taxa até 2 min. `Version`/`Channel` (estável, rc, alpha). `status` sugere a rc ou estável mais nova acima da base e mostra a alpha só para leitura (R7). Espelho em `~/.dsh/upstream/mirror/<tag>/` extraído sem `node_modules`, `.git`, `*.zh.md`, `*.i18n.yaml` e arquivos acima de 5 MB, nunca executado (R11), trocado por pasta temporária + rename. `Snapshot` (notas `.agents/notes/<status>/<tipo>`, pacotes, READMEs, `docs/`, pacotes `tool-*`, `SESSION_FORMAT_VERSION`, licença) e `diff` (novas, alteradas, removidas; sem o espelho da base, ignora o que o ledger já triou). Triagem: rejeição automática pelos padrões de envio de dados citando o ADR 101 (R2), com aviso quando uma nota alterada inverte uma decisão anterior; formato de sessão sempre `port`/`adapt` (R5); schema de ferramenta → `adapt` com os nomes Claude Code (R6); bug-fix no topo do backlog e ligado à spec (R4); escopo web/desktop/Office/cordis → `skip`; ligação item → componente/spec por tabela de termos. Ledger `ledger.json` + `ledger.md` gerado (um `ledger.md` escrito à mão nunca é sobrescrito), com origem (tag + caminho) e spec por item (R8); `mark` com reason/spec; `baseline` recusa alpha, ciclo de outra tag e itens sem decisão, listando-os (R9). Licença alterada → `triage` para até `--license-reviewed`. O ciclo 1 (168 itens: port 38 · adapt 25 · skip 94 · reject 11, base `dsh-v0.2.1-rc.5`) vem embutido e é o ponto de partida de um `~/.dsh` novo; `dsh upstream import <ledger.md>` importa outro. CLI `dsh upstream status|fetch [--tag] [--from-archive]|diff|triage [--accept-suggested]|mark|baseline|import`, `--ledger <pasta>`. 5 cenários de aceitação (upstream falso num servidor HTTP local que registra cada pedido: só `GET`, sem corpo, só GitHub/npm/codeload) + 8 testes de unidade; `check.ps1 -Gnu` verde.
+**Decisão (2026-11-05):** 🟡 Fetch raso = tarball da tag pelo codeload do GitHub (um `GET`, sem histórico), sem o `gix`: mesmo caminho dos plugins e sem dependência nova. 🟡 Ledger padrão em `~/.dsh/upstream/` (`--ledger _reversa_sdd/upstream` aponta para a pasta das specs). 🟡 Ligação item → componente por tabela de termos embutida (matriz de impacto resumida), não pela leitura da `spec-impact-matrix.md`. 🟡 No corpo da nota, só os identificadores inequívocos (`dsh_session_log`, `*-deepseek`) disparam o `reject`; no nome e no título, todos os padrões. 🟡 Sugestão nunca vale como decisão: confirmação por `mark` ou `triage --accept-suggested`.
+**Pendente:** agendar `dsh upstream status` (R10, Could, junto da agenda); `THIRD_PARTY_NOTICES` com o aviso MIT da DeepSeek (Tarefa 23); ciclo 2: `status` na rede real (2026-11-05) já sugere `dsh-v0.2.2-rc.1` (alpha `dsh-v0.2.2-alpha.3`; npm `latest = next = 0.2.2-rc.1`), a ser triado com `dsh upstream fetch`/`triage` e a confirmação do usuário (R9).
 
 ---
 
