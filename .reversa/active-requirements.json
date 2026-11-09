@@ -1,0 +1,10 @@
+{
+  "schema-version": 1,
+  "feature-dir": "_reversa_forward/001-backend-linux",
+  "feature-id": "001",
+  "short-name": "backend-linux",
+  "started-at": "2026-11-06T10:10:00Z",
+  "current-stage": "requirements",
+  "stages-completed": [],
+  "paused-features": []
+}

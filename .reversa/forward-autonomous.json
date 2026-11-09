@@ -1,0 +1,51 @@
+{
+  "schema-version": 1,
+  "started-at": "2026-11-06T10:05:00Z",
+  "status": "paused",
+  "answers": {
+    "target": "sync",
+    "doubts": "file",
+    "optional-stages": false,
+    "on-failure": "stop"
+  },
+  "queue": [
+    {
+      "item": "Backend Linux: comandos isolados (bubblewrap/landlock) e cofre de credenciais fora do Windows",
+      "feature-dir": "_reversa_forward/001-backend-linux",
+      "status": "blocked",
+      "last-stage": "coding-em-progresso (0/12)",
+      "note": "allowedPaths com caminho absoluto fora da raiz do projeto (D:/dsh/dsh-rs/**) é ignorado pela política do coding"
+    },
+    {
+      "item": "Interface web: dsh serve --http com tela no navegador sobre o motor de sessão",
+      "feature-dir": "",
+      "status": "pending",
+      "last-stage": "",
+      "note": ""
+    },
+    {
+      "item": "Imagem de contêiner: Dockerfile com binário, Node e dependências do REA",
+      "feature-dir": "",
+      "status": "pending",
+      "last-stage": "",
+      "note": ""
+    },
+    {
+      "item": "Instalador de um comando: install.sh e install.ps1 com verificação minisign, chamando dsh setup",
+      "feature-dir": "",
+      "status": "pending",
+      "last-stage": "",
+      "note": ""
+    },
+    {
+      "item": "dsh setup: configura o que falta conforme o ambiente (Windows, Ubuntu, contêiner) e roda doctor",
+      "feature-dir": "",
+      "status": "pending",
+      "last-stage": "",
+      "note": ""
+    }
+  ],
+  "warnings": [
+    "Política de edição: dsh-rs fica fora da raiz do projeto Reversa (deepseek-harness)."
+  ]
+}
